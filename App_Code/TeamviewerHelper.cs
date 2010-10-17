@@ -10,6 +10,9 @@ public class TeamviewerHelper : RemoteClientHelper
 {
 	private static string tableName = "teamviewer";
 	private static int number = 3;
+	private string teamviewerId;
+	private string password;
+	private string assistantType;
 	public TeamviewerHelper() { }
 	protected override Dictionary<string, string> GetParameters()
 	{
@@ -44,6 +47,25 @@ public class TeamviewerHelper : RemoteClientHelper
 			default:
 				base.Catenate(ref link, key, value);
 				break;
+		}
+		return link;
+	}
+	protected override void InitFields(Dictionary<string, string> parameters)
+	{
+		parameters.TryGetValue("teamviewer_id", out teamviewerId);
+		parameters.TryGetValue("password", out password);
+		parameters.TryGetValue("assistant_type", out assistantType);
+	}
+	protected override string MadeLink(string defaultValue)
+	{
+		string link = defaultValue;
+		if (teamviewerId.Length > 0 && password.Length > 0)
+		{
+			link = InitialLink;
+			Catenate(ref link, "teamviewer_id", teamviewerId);
+			Catenate(ref link, "password", password);
+			if (assistantType.Length > 0)
+				Catenate(ref link, "assistant_type", assistantType);
 		}
 		return link;
 	}

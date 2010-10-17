@@ -10,6 +10,10 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 {
 	private static string tableName = "remotelyanywhere";
 	private static int number = 4;
+	private string ip;
+	private string port;
+	private string username;
+	private string password;
 	public RemotelyanywhereHelper() { }
 	protected override Dictionary<string, string> GetParameters()
 	{
@@ -45,6 +49,25 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 			case "port":
 				link += ":" + value;
 				break;
+		}
+		return link;
+	}
+	protected override void InitFields(Dictionary<string, string> parameters)
+	{
+		parameters.TryGetValue("ip", out ip);
+		parameters.TryGetValue("port", out port);
+		parameters.TryGetValue("username", out username);
+		parameters.TryGetValue("password", out password);
+	}
+	protected override string MadeLink(string defaultValue)
+	{
+		string link = defaultValue;
+		if (ip.Length > 0)
+		{
+			link = InitialLink;
+			Catenate(ref link, "ip", ip);
+			if (port.Length > 0)
+				Catenate(ref link, "port", port);
 		}
 		return link;
 	}

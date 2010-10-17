@@ -12,6 +12,8 @@ public abstract class RemoteClientHelper
 {
 	protected abstract Dictionary<string, string> GetParameters();
 	protected abstract bool IsNeeded(string field);
+	protected abstract void InitFields(Dictionary<string, string> parameters);
+	protected abstract string MadeLink(string defaultValue);
 	protected abstract string InitialLink
 	{
 		get;
@@ -23,23 +25,9 @@ public abstract class RemoteClientHelper
 	}
 	public string CreateLink(string remoteClientTable, string id, string serverType, string defaultValue)
 	{
-		string link = defaultValue;
-		Dictionary<string, string> parameters = GetParameters();
+		Dictionary<string, string> parameters = this.GetParameters();
 		this.QueryParameters(remoteClientTable, id, serverType, parameters);
-
-		foreach (string field in parameters.Keys)
-		{
-			string value;
-			if (parameters.TryGetValue(field, out value) && value.Length > 0)
-			{
-				if (IsNeeded(field))
-				{
-					link = this.InitialLink;
-				}
-				Catenate(ref link, field, value);
-			}
-		}
-		return link;
+		return this.MadeLink(defaultValue);
 	}
 	protected void QueryParameters(string remoteClientTable, string id, string serverType, Dictionary<string, string> parameters)
 	{
@@ -63,6 +51,6 @@ public abstract class RemoteClientHelper
 				parameters[field] = dt.Rows[0][field].ToString();
 			}
 		}
+		this.InitFields(parameters);
 	}
-
 }
