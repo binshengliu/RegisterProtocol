@@ -25,12 +25,12 @@ public abstract class RemoteClientHelper
 	}
 	public string CreateLink(string remoteClientTable, string id, string serverType, string defaultValue)
 	{
-		Dictionary<string, string> parameters = this.GetParameters();
-		this.QueryParameters(remoteClientTable, id, serverType, parameters);
+		this.QueryParameters(remoteClientTable, id, serverType);
 		return this.MadeLink(defaultValue);
 	}
-	protected void QueryParameters(string remoteClientTable, string id, string serverType, Dictionary<string, string> parameters)
+	protected void QueryParameters(string remoteClientTable, string id, string serverType)
 	{
+		Dictionary<string, string> parameters = this.GetParameters();
 		string sql = "select ";
 		foreach (string field in parameters.Keys)
 		{
