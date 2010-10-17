@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 /// <summary>
 /// Summary description for RemotelyanywhereHelper
@@ -15,22 +16,67 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 	private const string columnPort = "port";
 	private const string columnUsername = "username";
 	private const string columnPassword = "password";
-	private string ip = "";
-	private string port = "";
-	private string username = "";
-	private string password = "";
-	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+	//private string ip = "";
+	public string Ip
+	{
+		get { return Parameters[columnIp]; }
+		set { Parameters[columnIp] = value; }
+	}
+	//private string port = "";
+	public string Port
+	{
+		get { return Parameters[columnPort]; }
+		set { Parameters[columnPort] = value; }
+	}
+	//private string username = "";
+	public string Username
+	{
+		get { return Parameters[columnUsername]; }
+		set { Parameters[columnUsername] = value; }
+	}
+	//private string password = "";
+	public string Password
+	{
+		get { return Parameters[columnPassword]; }
+		set { Parameters[columnPassword] = value; }
+	}
+	private Dictionary<string, string> parameters = new Dictionary<string, string>()
+	{
+	        {columnIp, ""},
+	        {columnPort, ""},
+	        {columnUsername, ""},
+	        {columnPassword, ""},
+	};
 	public override Dictionary<string, string> Parameters
 	{
 		get { return parameters; }
 	}
-	public RemotelyanywhereHelper()
+	public static RemoteClientHelper GetRemoteClientHelper(string id, string serverType)
 	{
-		parameters.Add(columnIp, ip);
-		parameters.Add(columnPort, port);
-		parameters.Add(columnUsername, username);
-		parameters.Add(columnPassword, password);
+		RemotelyanywhereHelper helper = new RemotelyanywhereHelper();
+		string sql = "select ";
+		foreach (string field in helper.Parameters.Keys)
+		{
+			sql += field;
+			sql += ",";
+		}
+		sql = sql.Substring(0, sql.Length - 1);
+		sql += " from " + RemotelyanywhereHelper.tableName;
+		sql += " where id=" + id;
+		sql += " and server_type='" + serverType + "'";
+		DataSet ds = DBAccess.GetDataSet(sql, RemotelyanywhereHelper.tableName);
+		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
+		{
+			DataTable dt = ds.Tables[RemotelyanywhereHelper.tableName];
+			foreach (string field in new List<string>(helper.Parameters.Keys))
+			{
+				helper.Parameters[field] = dt.Rows[0][field].ToString();
+			}
+		}
+		return helper;
 	}
+	private RemotelyanywhereHelper() { }
 
 	protected override string Catenate(ref string link, string key, string value)
 	{
@@ -46,15 +92,15 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 		return link;
 	}
 
-	protected override string MadeLink(string defaultValue)
+	public override string CreateLink(string defaultValue)
 	{
 		string link = defaultValue;
-		if (ip.Length > 0)
+		if (Ip.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnIp, ip);
-			if (port.Length > 0)
-				Catenate(ref link, columnPort, port);
+			Catenate(ref link, columnIp, Ip);
+			if (Port.Length > 0)
+				Catenate(ref link, columnPort, Port);
 		}
 		return link;
 	}

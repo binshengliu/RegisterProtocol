@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 /// <summary>
 /// Summary description for TtvncHelper
@@ -13,30 +14,63 @@ public class TtvncHelper : RemoteClientHelper
 	private static int number = 2;
 	private const string columnCode = "code";
 	private const string columnAssistantMode = "assistant_mode";
-	private string code = "";
-	private string assistantMode = "";
-
-	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+	//private string code = "";
+	public string Code
+	{
+		get { return Parameters[columnCode]; }
+		set { Parameters[columnCode] = value; }
+	}
+	//private string assistantMode = "";
+	public string AssistantMode
+	{
+		get { return Parameters[columnAssistantMode]; }
+		set { Parameters[columnAssistantMode] = value; }
+	}
+	private Dictionary<string, string> parameters = new Dictionary<string, string>()
+	{
+	        {columnCode, ""},
+	        {columnAssistantMode, ""},
+	};
 	public override Dictionary<string, string> Parameters
 	{
 		get { return parameters; }
 	}
-
-	public TtvncHelper()
+	public static RemoteClientHelper GetRemoteClientHelper(string id, string serverType)
 	{
-		parameters.Add(columnCode, code);
-		parameters.Add(columnAssistantMode, assistantMode);
+		TtvncHelper helper = new TtvncHelper();
+		string sql = "select ";
+		foreach (string field in helper.Parameters.Keys)
+		{
+			sql += field;
+			sql += ",";
+		}
+		sql = sql.Substring(0, sql.Length - 1);
+		sql += " from " + TtvncHelper.tableName;
+		sql += " where id=" + id;
+		sql += " and server_type='" + serverType + "'";
+		DataSet ds = DBAccess.GetDataSet(sql, TtvncHelper.tableName);
+		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
+		{
+			DataTable dt = ds.Tables[TtvncHelper.tableName];
+			foreach (string field in new List<string>(helper.Parameters.Keys))
+			{
+				//kvp.Value = dt.Rows[0][kvp.Key].ToString();
+				helper.Parameters[field] = dt.Rows[0][field].ToString();
+			}
+		}
+		return helper;
 	}
+	private TtvncHelper() { }
 
-	protected override string MadeLink(string defaultValue)
+	public override string CreateLink(string defaultValue)
 	{
 		string link = defaultValue;
-		if (code.Length > 0)
+		if (Code.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnCode, code);
-			if (assistantMode.Length > 0)
-				Catenate(ref link, columnAssistantMode, assistantMode);
+			Catenate(ref link, columnCode, Code);
+			if (AssistantMode.Length > 0)
+				Catenate(ref link, columnAssistantMode, AssistantMode);
 		}
 		return link;
 	}

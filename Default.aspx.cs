@@ -15,35 +15,35 @@ public partial class _Default : System.Web.UI.Page
 	{
 	}
 
-	protected string CreateLink(object id, string serverName)
+	protected string CreateLink(object id, string serverType)
 	{
 		string defaultLink = "ConfigurationPrompt.aspx";
 		string link = defaultLink;
 		string connStr = ConfigurationManager.ConnectionStrings["RemoteControlConnectionString"].ConnectionString;
-		string serverColumnName = GetServerTypeColumnName(serverName);
+		string serverColumnName = GetServerTypeColumnName(serverType);
 		string remoteClientTableName = GetRemoteClientTableName(serverColumnName, (string)id);
 		RemoteClientHelper rch = null;
 		switch (remoteClientTableName)
 		{
 			case "radmin":
-				rch = new RadminHelper();
+				rch = RadminHelper.GetRemoteClientHelper(id.ToString(), serverType);
 				break;
 			case "mstsc":
-				rch = new MstscHelper();
+				rch = MstscHelper.GetRemoteClientHelper(id.ToString(), serverType);
 				break;
 			case "ttvnc":
-				rch = new TtvncHelper();
+				rch = TtvncHelper.GetRemoteClientHelper(id.ToString(), serverType);
 				break;
 			case "teamviewer":
-				rch = new TeamviewerHelper();
+				rch = TeamviewerHelper.GetRemoteClientHelper(id.ToString(), serverType);
 				break;
 			case "remotelyanywhere":
-				rch = new RemotelyanywhereHelper();
+				rch = RemotelyanywhereHelper.GetRemoteClientHelper(id.ToString(), serverType);
 				break;
 		}
 		if (rch != null)
 		{
-			link = rch.CreateLink(remoteClientTableName, id.ToString(), serverName, defaultLink);
+			link = rch.CreateLink(defaultLink);
 		}
 		return link;
 	}
@@ -55,15 +55,16 @@ public partial class _Default : System.Web.UI.Page
 
 	protected string GetRemoteClientTableName(string serverColumnName, string id)
 	{
-		string remoteType = "";
-		string selectString = "select " + serverColumnName + " from cafe_information";
-		selectString += " where id=" + id;
-		DataSet ds = DBAccess.GetDataSet(selectString, serverColumnName);
-		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
-		{
-			DataTable dt = ds.Tables[serverColumnName];
-			remoteType = dt.Rows[0][serverColumnName].ToString();
-		}
+		CafeInformationHelper helper = CafeInformationHelper.GetCafeInformationHelper(id);
+		string remoteType = helper.Parameters[serverColumnName];
+		//string selectString = "select " + serverColumnName + " from cafe_information";
+		//selectString += " where id=" + id;
+		//DataSet ds = DBAccess.GetDataSet(selectString, serverColumnName);
+		//if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
+		//{
+		//        DataTable dt = ds.Tables[serverColumnName];
+		//        remoteType = dt.Rows[0][serverColumnName].ToString();
+		//}
 		return remoteType;
 	}
 

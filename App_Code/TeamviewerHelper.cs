@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 /// <summary>
 /// Summary description for TeamviewerHelper
@@ -15,22 +16,61 @@ public class TeamviewerHelper : RemoteClientHelper
 	private const string columnPassword = "password";
 	private const string columnAssistantType = "assistant_type";
 
-	private string teamviewerId = "";
-	private string password = "";
-	private string assistantType = "";
-
-	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+	//private string teamviewerId = "";
+	public string TeamviewerId
+	{
+		get { return Parameters[columnTeamviewerId]; }
+		set { Parameters[columnTeamviewerId] = value; }
+	}
+	//private string password = "";
+	public string Password
+	{
+		get { return Parameters[columnPassword]; }
+		set { Parameters[columnPassword] = value; }
+	}
+	//private string assistantType = "";
+	public string AssistantType
+	{
+		get { return Parameters[columnAssistantType]; }
+		set { Parameters[columnAssistantType] = value; }
+	}
+	private Dictionary<string, string> parameters = new Dictionary<string, string>()
+	{
+	        {columnTeamviewerId, ""},
+	        {columnPassword, ""},
+	        {columnAssistantType, ""},
+	};
 	public override Dictionary<string, string> Parameters
 	{
 		get { return parameters; }
 	}
 
-	public TeamviewerHelper()
+	public static RemoteClientHelper GetRemoteClientHelper(string id, string serverType)
 	{
-		parameters.Add(columnTeamviewerId, teamviewerId);
-		parameters.Add(columnPassword, password);
-		parameters.Add(columnAssistantType, assistantType);
+		TeamviewerHelper helper = new TeamviewerHelper();
+		string sql = "select ";
+		foreach (string field in helper.Parameters.Keys)
+		{
+			sql += field;
+			sql += ",";
+		}
+		sql = sql.Substring(0, sql.Length - 1);
+		sql += " from " + TeamviewerHelper.tableName;
+		sql += " where id=" + id;
+		sql += " and server_type='" + serverType + "'";
+		DataSet ds = DBAccess.GetDataSet(sql, TeamviewerHelper.tableName);
+		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
+		{
+			DataTable dt = ds.Tables[TeamviewerHelper.tableName];
+			foreach (string field in new List<string>(helper.Parameters.Keys))
+			{
+				//kvp.Value = dt.Rows[0][kvp.Key].ToString();
+				helper.Parameters[field] = dt.Rows[0][field].ToString();
+			}
+		}
+		return helper;
 	}
+	private TeamviewerHelper() { }
 
 	protected override string Catenate(ref string link, string key, string value)
 	{
@@ -46,16 +86,16 @@ public class TeamviewerHelper : RemoteClientHelper
 		return link;
 	}
 
-	protected override string MadeLink(string defaultValue)
+	public override string CreateLink(string defaultValue)
 	{
 		string link = defaultValue;
-		if (teamviewerId.Length > 0 && password.Length > 0)
+		if (TeamviewerId.Length > 0 && Password.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnTeamviewerId, teamviewerId);
-			Catenate(ref link, columnPassword, password);
-			if (assistantType.Length > 0)
-				Catenate(ref link, columnAssistantType, assistantType);
+			Catenate(ref link, columnTeamviewerId, TeamviewerId);
+			Catenate(ref link, columnPassword, Password);
+			if (AssistantType.Length > 0)
+				Catenate(ref link, columnAssistantType, AssistantType);
 		}
 		return link;
 	}

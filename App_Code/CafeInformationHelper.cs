@@ -62,16 +62,12 @@ public class CafeInformationHelper
 		{
 			DataTable dt = ds.Tables[tableName];
 			helper = new CafeInformationHelper();
-			helper.id = dt.Rows[0][columnId].ToString();
-			helper.name = dt.Rows[0][columnId].ToString();
-			helper.telephone = dt.Rows[0][columnId].ToString();
-			helper.contact = dt.Rows[0][columnId].ToString();
-			helper.mobile = dt.Rows[0][columnId].ToString();
-			helper.mainServerType = dt.Rows[0][columnId].ToString();
-			helper.secondaryServerType = dt.Rows[0][columnId].ToString();
-			helper.cashServerType = dt.Rows[0][columnId].ToString();
-			helper.movieServerType = dt.Rows[0][columnId].ToString();
-			helper.routerServerType = dt.Rows[0][columnId].ToString();
+
+			foreach (string field in new List<string>(helper.Parameters.Keys))
+			{
+				//kvp.Value = dt.Rows[0][kvp.Key].ToString();
+				helper.Parameters[field] = dt.Rows[0][field].ToString();
+			}
 		}
 		return helper;
 	}
