@@ -12,8 +12,8 @@ public class TtvncHelper : RemoteClientHelper
 	private static string tableName = "ttvnc";
 	private const string initialLink = "wbr://type=2&progname=ttvnc.exe";
 	private static int number = 2;
-	private const string columnCode = "code";
-	private const string columnAssistantMode = "assistant_mode";
+	public const string columnCode = "code";
+	public const string columnAssistantMode = "assistant_mode";
 	//private string code = "";
 	public string Code
 	{

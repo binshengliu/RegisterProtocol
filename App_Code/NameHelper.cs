@@ -8,9 +8,6 @@ using System.Web;
 /// </summary>
 public class NameHelper
 {
-	public NameHelper()
-	{
-	}
 	public static string GetServerTypeColumnName(string serverName)
 	{
 		return serverName + "_type";

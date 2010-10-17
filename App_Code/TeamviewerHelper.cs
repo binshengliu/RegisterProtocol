@@ -12,9 +12,9 @@ public class TeamviewerHelper : RemoteClientHelper
 	private const string tableName = "teamviewer";
 	private const string initialLink = "wbr://type=3&progname=teamviewer.exe";
 	private const int number = 3;
-	private const string columnTeamviewerId = "teamviewer_id";
-	private const string columnPassword = "password";
-	private const string columnAssistantType = "assistant_type";
+	public const string columnTeamviewerId = "teamviewer_id";
+	public const string columnPassword = "password";
+	public const string columnAssistantType = "assistant_type";
 
 	//private string teamviewerId = "";
 	public string TeamviewerId

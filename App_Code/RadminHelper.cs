@@ -12,10 +12,10 @@ public class RadminHelper : RemoteClientHelper
 	private const string tableName = "radmin";
 	private const string initialLink = "wbr://type=0&progname=radmin.exe";
 	private const int number = 0;
-	private const string columnIp = "ip";
-	private const string columnPort = "port";
-	private const string columnUsername = "username";
-	private const string columnPassword = "password";
+	public const string columnIp = "ip";
+	public const string columnPort = "port";
+	public const string columnUsername = "username";
+	public const string columnPassword = "password";
 
 	//private string ip = "";
 	public string Ip

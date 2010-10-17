@@ -9,111 +9,198 @@ public partial class EditRemoteServer : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		string id = Request["id"];
-	}
-	protected void RadioButtonListRemoteType_SelectedIndexChanged(object sender, EventArgs e)
-	{
-		string selectedValue = this.RadioButtonListRemoteType.SelectedValue;
-		switch (selectedValue)
+		if (!this.IsPostBack)
 		{
-			case "radmin":
-				AddRadminControls(this.PlaceHolderMainServer);
-				break;
-			case "mstsc":
-				AddMstscControls(this.PlaceHolderMainServer);
-				break;
-			case "ttvnc":
-				AddTtvncControls(this.PlaceHolderMainServer);
-				break;
-			case "teamviewer":
-				AddTeamviewerControls(this.PlaceHolderMainServer);
-				break;
-			case "remotelyanywhere":
-				break;
+		}
+		string id = Request["id"];
+		if (id != null && id.Length > 0)
+		{
+			FillCafeInformationControls(id);
+			DisplayPageControls(id);
 		}
 	}
 
-	private void AddRadminControls(PlaceHolder ph)
+	private void DisplayPageControls(string id)
 	{
-		Label ipLabel = new Label();
-		ipLabel.Text = "IP：";
-		TextBox ipTextBox = new TextBox();
-		ph.Controls.Add(ipLabel);
-		ph.Controls.Add(ipTextBox);
+		List<string> serverTypes = new List<string>()
+	        {
+	                "main_server", "secondary_server", "cash_register_server", "movie_server", "router_server", 
+	        };
 
-		Label portLabel = new Label();
-		portLabel.Text = "端口：";
-		TextBox portTextBox = new TextBox();
-		portTextBox.TextMode = TextBoxMode.Password;
-		ph.Controls.Add(portLabel);
-		ph.Controls.Add(portTextBox);
-
-		Label usernameLabel = new Label();
-		usernameLabel.Text = "用户名：";
-		TextBox usernameTextBox = new TextBox();
-		ph.Controls.Add(usernameLabel);
-		ph.Controls.Add(usernameTextBox);
-
-		Label passwordLabel = new Label();
-		passwordLabel.Text = "密码：";
-		TextBox passwordTextBox = new TextBox();
-		passwordTextBox.TextMode = TextBoxMode.Password;
-		ph.Controls.Add(passwordLabel);
-		ph.Controls.Add(passwordTextBox);
+		foreach (string serverType in serverTypes)
+		{
+			string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
+			if (Session["cafe_information_" + id] == null)
+			{
+				Session["cafe_information_" + id] = CafeInformationHelper.GetCafeInformationHelper(id.ToString());
+			}
+			CafeInformationHelper cih = (CafeInformationHelper)Session["cafe_information_" + id.ToString()];
+			string remoteClientTableName = cih.Parameters[serverColumnName];
+			RadioButtonList rbl = GetRadioButtonList(serverType);
+			rbl.SelectedValue = remoteClientTableName;
+			switch (remoteClientTableName)
+			{
+				case "radmin":
+					DisplayRadminControls(serverType);
+					break;
+				case "mstsc":
+					DisplayMstscControls(serverType);
+					break;
+				case "ttvnc":
+					DisplayTtvncControls(serverType);
+					break;
+				case "teamviewer":
+					DisplayTeamviewerControls(serverType);
+					break;
+				case "remotelyanywhere":
+					DisplayRemotelyanywhereControls(serverType);
+					break;
+			}
+		}
 	}
 
-	private void AddMstscControls(PlaceHolder ph)
+	private void FillCafeInformationControls(string id)
 	{
-		Label ipLabel = new Label();
-		ipLabel.Text = "IP：";
-		TextBox ipTextBox = new TextBox();
-		ph.Controls.Add(ipLabel);
-		ph.Controls.Add(ipTextBox);
+		if (Session["cafe_information_" + id] == null)
+		{
+			Session["cafe_information_" + id] = CafeInformationHelper.GetCafeInformationHelper(id.ToString());
+		}
+		CafeInformationHelper cih = (CafeInformationHelper)Session["cafe_information_" + id.ToString()];
 
-		Label portLabel = new Label();
-		portLabel.Text = "端口：";
-		TextBox portTextBox = new TextBox();
-		portTextBox.TextMode = TextBoxMode.Password;
-		ph.Controls.Add(portLabel);
-		ph.Controls.Add(portTextBox);
+		this.TextBoxCafeId.Text = cih.Parameters[CafeInformationHelper.columnId];
+		this.TextBoxCafeName.Text = cih.Parameters[CafeInformationHelper.columnName];
+		this.TextBoxTelephone.Text = cih.Parameters[CafeInformationHelper.columnTelephone];
+		this.TextBoxContact.Text = cih.Parameters[CafeInformationHelper.columnContact];
+		this.TextBoxMobile.Text = cih.Parameters[CafeInformationHelper.columnMobile];
 	}
 
-	private void AddTtvncControls(PlaceHolder ph)
+	private RadioButtonList GetRadioButtonList(string serverType)
 	{
-		Label codeLabel = new Label();
-		codeLabel.Text = "验证码：";
-		TextBox codeTextBox = new TextBox();
-		ph.Controls.Add(codeLabel);
-		ph.Controls.Add(codeTextBox);
-
-		Label assistantModeLabel = new Label();
-		assistantModeLabel.Text = "辅助模式：";
-		TextBox assistantModeTextBox = new TextBox();
-		ph.Controls.Add(assistantModeLabel);
-		ph.Controls.Add(assistantModeTextBox);
+		RadioButtonList rbl = null;
+		switch (serverType)
+		{
+			case "main_server":
+				rbl = this.RadioButtonListMainServerRemoteType;
+				break;
+			case "secondary_server": 
+				rbl = this.RadioButtonListSecondaryServerRemoteType;
+				break;
+			case "cash_register_server":
+				rbl = this.RadioButtonListCashRegisterServerRemoteType;
+				break;
+			case "movie_server":
+				rbl = this.RadioButtonListMovieServerRemoteType;
+				break;
+			case "router_server":
+				rbl = this.RadioButtonListRouterServerRemoteType;
+				break;
+		}
+		return rbl;
 	}
 
-	private void AddTeamviewerControls(PlaceHolder ph)
+	private void DisplayControls(string serverType, List<string> controlIdSuffices)
 	{
-		Label idLabel = new Label();
-		idLabel.Text = "ID：";
-		TextBox idTextBox = new TextBox();
-		ph.Controls.Add(idLabel);
-		ph.Controls.Add(idTextBox);
+		string controlIdInfix = "MainServer";
+		switch (serverType)
+		{
+			case "main_server":
+				break;
+			case "secondary_server":
+				controlIdInfix = "SecondaryServer";
+				break;
+			case "cash_register_server":
+				controlIdInfix = "CashRegisterServer";
+				break;
+			case "movie_server":
+				controlIdInfix = "MovieServer";
+				break;
+			case "router_server":
+				controlIdInfix = "RouterServer";
+				break;
+		}
+		List<string> controlIdPrefices = new List<string>()
+		{
+			"Label", "TextBox",
+		};
+		foreach (string p in controlIdPrefices)
+		{
+			foreach (string s in controlIdSuffices)
+			{
+				string controlId = p + controlIdInfix + s;
+				FindControl(controlId).Visible = true;
+			}
+		}
+	}
 
-		Label passwordLabel = new Label();
-		passwordLabel.Text = "密码：";
-		TextBox passwordTextBox = new TextBox();
-		passwordTextBox.TextMode = TextBoxMode.Password;
-		ph.Controls.Add(passwordLabel);
-		ph.Controls.Add(passwordTextBox);
+	private void DisplayRadminControls(string serverType)
+	{
+		List<string> controlIdSuffices = new List<string>()
+		{
+			"Ip", "Port", "Username", "Password",
+		};
+		DisplayControls(serverType, controlIdSuffices);
+	}
 
-		Label assistantTypeLabel = new Label();
-		assistantTypeLabel.Text = "辅助类型：";
-		assistantTypeLabel.Visible = false;
-		TextBox assistantTypeTextBox = new TextBox();
-		assistantTypeTextBox.Visible = false;
-		ph.Controls.Add(assistantTypeLabel);
-		ph.Controls.Add(assistantTypeTextBox);
+	private void DisplayMstscControls(string serverType)
+	{
+		List<string> controlIdSuffices = new List<string>()
+		{
+			"Ip", "Port", "Username", "Password",
+		};
+		DisplayControls(serverType, controlIdSuffices);
+	}
+
+	private void DisplayTtvncControls(string serverType)
+	{
+		List<string> controlIdSuffices = new List<string>()
+		{
+			"AssistantMode", "Code",
+		};
+		DisplayControls(serverType, controlIdSuffices);
+	}
+
+	private void DisplayTeamviewerControls(string serverType)
+	{
+		List<string> controlIdSuffices = new List<string>()
+		{
+			"Password",
+			"Id", "AssistantType",
+		};
+		DisplayControls(serverType, controlIdSuffices);
+	}
+
+	private void DisplayRemotelyanywhereControls(string serverType)
+	{
+		List<string> controlIdSuffices = new List<string>()
+		{
+			"Ip", "Port", "Username", "Password",
+		};
+		DisplayControls(serverType, controlIdSuffices);
+	}
+
+	protected void RadioButtonListMainServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		RadioButtonList rbl = (RadioButtonList)sender;
+		string remoteType = rbl.SelectedValue;
+	}
+
+	protected void RadioButtonListSecondaryServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		string remoteType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
+	}
+
+	protected void RadioButtonListCashRegisterServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		string remoteType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
+	}
+
+	protected void RadioButtonListMovieServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		string remoteType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
+	}
+
+	protected void RadioButtonListRouterServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		string remoteType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
 	}
 }

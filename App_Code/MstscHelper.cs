@@ -12,10 +12,10 @@ public class MstscHelper : RemoteClientHelper
 	private const string tableName = "mstsc";
 	private const string initialLink = "wbr://type=1&progname=mstsc.exe";
 	private const int number = 1;
-	private const string columnIp = "ip";
-	private const string columnPort = "port";
-	private const string columnUsername = "username";
-	private const string columnPassword = "password";
+	public const string columnIp = "ip";
+	public const string columnPort = "port";
+	public const string columnUsername = "username";
+	public const string columnPassword = "password";
 
 	//private string ip = "";
 	public string Ip

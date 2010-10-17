@@ -20,8 +20,13 @@ public partial class _Default : System.Web.UI.Page
 		string defaultLink = "ConfigurationPrompt.aspx";
 		string link = defaultLink;
 		string connStr = ConfigurationManager.ConnectionStrings["RemoteControlConnectionString"].ConnectionString;
-		string serverColumnName = GetServerTypeColumnName(serverType);
-		string remoteClientTableName = GetRemoteClientTableName(serverColumnName, (string)id);
+		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
+		if (Session["cafe_information_" + id.ToString()] == null)
+		{
+			Session["cafe_information_" + id.ToString()] = CafeInformationHelper.GetCafeInformationHelper(id.ToString());
+		}
+		CafeInformationHelper helper = (CafeInformationHelper)Session["cafe_information_" + id.ToString()];
+		string remoteClientTableName = helper.Parameters[serverColumnName];
 		RemoteClientHelper rch = null;
 		switch (remoteClientTableName)
 		{
@@ -43,29 +48,10 @@ public partial class _Default : System.Web.UI.Page
 		}
 		if (rch != null)
 		{
+			Session[remoteClientTableName + id.ToString() + serverType] = rch;
 			link = rch.CreateLink(defaultLink);
 		}
 		return link;
-	}
-
-	protected string GetServerTypeColumnName(string serverName)
-	{
-		return serverName + "_type";
-	}
-
-	protected string GetRemoteClientTableName(string serverColumnName, string id)
-	{
-		CafeInformationHelper helper = CafeInformationHelper.GetCafeInformationHelper(id);
-		string remoteType = helper.Parameters[serverColumnName];
-		//string selectString = "select " + serverColumnName + " from cafe_information";
-		//selectString += " where id=" + id;
-		//DataSet ds = DBAccess.GetDataSet(selectString, serverColumnName);
-		//if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
-		//{
-		//        DataTable dt = ds.Tables[serverColumnName];
-		//        remoteType = dt.Rows[0][serverColumnName].ToString();
-		//}
-		return remoteType;
 	}
 
 	protected void LinkButtonEdit_Click(object sender, EventArgs e)
