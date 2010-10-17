@@ -8,66 +8,53 @@ using System.Web;
 /// </summary>
 public class RemotelyanywhereHelper : RemoteClientHelper
 {
-	private static string tableName = "remotelyanywhere";
-	private static int number = 4;
-	private string ip;
-	private string port;
-	private string username;
-	private string password;
-	public RemotelyanywhereHelper() { }
-	protected override Dictionary<string, string> GetParameters()
+	private const string tableName = "remotelyanywhere";
+	private const string initialLink = "http://";
+	private const int number = 4;
+	private const string columnIp = "ip";
+	private const string columnPort = "port";
+	private const string columnUsername = "username";
+	private const string columnPassword = "password";
+	private string ip = "";
+	private string port = "";
+	private string username = "";
+	private string password = "";
+	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+	public override Dictionary<string, string> Parameters
 	{
-		Dictionary<string, string> parameters = new Dictionary<string, string>();
-		parameters.Add("ip", "");
-		parameters.Add("port", "");
-		parameters.Add("username", "");
-		parameters.Add("password", "");
-		return parameters;
+		get { return parameters; }
 	}
-	protected override bool IsNeeded(string field)
+	public RemotelyanywhereHelper()
 	{
-		if (field == "ip")
-		{
-			return true;
-		}
-		return false;
+		parameters.Add(columnIp, ip);
+		parameters.Add(columnPort, port);
+		parameters.Add(columnUsername, username);
+		parameters.Add(columnPassword, password);
 	}
-	protected override string InitialLink
-	{
-		get
-		{
-			return "http://";
-		}
-	}
+
 	protected override string Catenate(ref string link, string key, string value)
 	{
 		switch (key)
 		{
-			case "ip":
+			case columnIp:
 				link += value;
 				break;
-			case "port":
+			case columnPort:
 				link += ":" + value;
 				break;
 		}
 		return link;
 	}
-	protected override void InitFields(Dictionary<string, string> parameters)
-	{
-		parameters.TryGetValue("ip", out ip);
-		parameters.TryGetValue("port", out port);
-		parameters.TryGetValue("username", out username);
-		parameters.TryGetValue("password", out password);
-	}
+
 	protected override string MadeLink(string defaultValue)
 	{
 		string link = defaultValue;
 		if (ip.Length > 0)
 		{
-			link = InitialLink;
-			Catenate(ref link, "ip", ip);
+			link = initialLink;
+			Catenate(ref link, columnIp, ip);
 			if (port.Length > 0)
-				Catenate(ref link, "port", port);
+				Catenate(ref link, columnPort, port);
 		}
 		return link;
 	}

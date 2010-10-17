@@ -8,40 +8,35 @@ using System.Web;
 /// </summary>
 public class TeamviewerHelper : RemoteClientHelper
 {
-	private static string tableName = "teamviewer";
-	private static int number = 3;
-	private string teamviewerId;
-	private string password;
-	private string assistantType;
-	public TeamviewerHelper() { }
-	protected override Dictionary<string, string> GetParameters()
+	private const string tableName = "teamviewer";
+	private const string initialLink = "wbr://type=3&progname=teamviewer.exe";
+	private const int number = 3;
+	private const string columnTeamviewerId = "teamviewer_id";
+	private const string columnPassword = "password";
+	private const string columnAssistantType = "assistant_type";
+
+	private string teamviewerId = "";
+	private string password = "";
+	private string assistantType = "";
+
+	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+	public override Dictionary<string, string> Parameters
 	{
-		Dictionary<string, string> parameters = new Dictionary<string, string>();
-		parameters.Add("teamviewer_id", "");
-		parameters.Add("password", "");
-		parameters.Add("assistant_type", "");
-		return parameters;
+		get { return parameters; }
 	}
-	protected override bool IsNeeded(string field)
+
+	public TeamviewerHelper()
 	{
-		if (field == "teamviewer_id")
-		{
-			return true;
-		}
-		return false;
+		parameters.Add(columnTeamviewerId, teamviewerId);
+		parameters.Add(columnPassword, password);
+		parameters.Add(columnAssistantType, assistantType);
 	}
-	protected override string InitialLink
-	{
-		get
-		{
-			return "wbr://type=3&progname=teamviewer.exe";
-		}
-	}
+
 	protected override string Catenate(ref string link, string key, string value)
 	{
 		switch (key)
 		{
-			case "teamviewer_id":
+			case columnTeamviewerId:
 				base.Catenate(ref link, "id", value);
 				break;
 			default:
@@ -50,22 +45,17 @@ public class TeamviewerHelper : RemoteClientHelper
 		}
 		return link;
 	}
-	protected override void InitFields(Dictionary<string, string> parameters)
-	{
-		parameters.TryGetValue("teamviewer_id", out teamviewerId);
-		parameters.TryGetValue("password", out password);
-		parameters.TryGetValue("assistant_type", out assistantType);
-	}
+
 	protected override string MadeLink(string defaultValue)
 	{
 		string link = defaultValue;
 		if (teamviewerId.Length > 0 && password.Length > 0)
 		{
-			link = InitialLink;
-			Catenate(ref link, "teamviewer_id", teamviewerId);
-			Catenate(ref link, "password", password);
+			link = initialLink;
+			Catenate(ref link, columnTeamviewerId, teamviewerId);
+			Catenate(ref link, columnPassword, password);
 			if (assistantType.Length > 0)
-				Catenate(ref link, "assistant_type", assistantType);
+				Catenate(ref link, columnAssistantType, assistantType);
 		}
 		return link;
 	}

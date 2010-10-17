@@ -10,14 +10,8 @@ using System.Data;
 /// </summary>
 public abstract class RemoteClientHelper
 {
-	protected abstract Dictionary<string, string> GetParameters();
-	protected abstract bool IsNeeded(string field);
-	protected abstract void InitFields(Dictionary<string, string> parameters);
+	public abstract Dictionary<string, string> Parameters { get; }
 	protected abstract string MadeLink(string defaultValue);
-	protected abstract string InitialLink
-	{
-		get;
-	}
 	protected virtual string Catenate(ref string link, string key, string value)
 	{
 		link += "&" + key + "=" + value;
@@ -30,7 +24,7 @@ public abstract class RemoteClientHelper
 	}
 	protected void QueryParameters(string remoteClientTable, string id, string serverType)
 	{
-		Dictionary<string, string> parameters = this.GetParameters();
+		Dictionary<string, string> parameters = this.Parameters;
 		string sql = "select ";
 		foreach (string field in parameters.Keys)
 		{
@@ -51,6 +45,5 @@ public abstract class RemoteClientHelper
 				parameters[field] = dt.Rows[0][field].ToString();
 			}
 		}
-		this.InitFields(parameters);
 	}
 }

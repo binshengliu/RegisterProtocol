@@ -10,7 +10,6 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	protected void Page_Load(object sender, EventArgs e)
 	{
 		string id = Request["id"];
-		//AddRadminControls(this.PlaceHolderMainServer);
 	}
 	protected void RadioButtonListRemoteType_SelectedIndexChanged(object sender, EventArgs e)
 	{
