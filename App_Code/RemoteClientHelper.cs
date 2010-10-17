@@ -17,4 +17,27 @@ public abstract class RemoteClientHelper
 		link += "&" + key + "=" + value;
 		return link;
 	}
+	public static RemoteClientHelper GetRemoteClientHelper(string remoteClientType, string id, string serverType)
+	{
+		RemoteClientHelper rch = null;
+		switch (remoteClientType)
+		{
+			case "radmin":
+				rch = RadminHelper.GetRemoteClientHelper(id, serverType);
+				break;
+			case "mstsc":
+				rch = MstscHelper.GetRemoteClientHelper(id, serverType);
+				break;
+			case "ttvnc":
+				rch = TtvncHelper.GetRemoteClientHelper(id, serverType);
+				break;
+			case "teamviewer":
+				rch = TeamviewerHelper.GetRemoteClientHelper(id, serverType);
+				break;
+			case "remotelyanywhere":
+				rch = RemotelyanywhereHelper.GetRemoteClientHelper(id, serverType);
+				break;
+		}
+		return rch;
+	}
 }

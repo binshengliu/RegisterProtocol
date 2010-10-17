@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>编辑</title>
 	<style type="text/css">
 		.style1
 		{
@@ -93,7 +93,6 @@
 					<asp:TextBox ID="TextBoxMainServerAssistantMode" runat="server" Visible="False"></asp:TextBox>
 					<asp:RadioButtonList ID="RadioButtonListMainServerRemoteType" runat="server" 
 						AutoPostBack="True" 
-						onselectedindexchanged="RadioButtonListMainServerRemoteType_SelectedIndexChanged" 
 						RepeatDirection="Horizontal">
 						<asp:ListItem Value="radmin">Radmin</asp:ListItem>
 						<asp:ListItem Value="mstsc">3389</asp:ListItem>
@@ -127,7 +126,6 @@
 					<asp:TextBox ID="TextBoxSecondaryServerAssistantMode" runat="server" Visible="False"></asp:TextBox>
 					<asp:RadioButtonList ID="RadioButtonListSecondaryServerRemoteType" 
 						runat="server" AutoPostBack="True" 
-						onselectedindexchanged="RadioButtonListSecondaryServerRemoteType_SelectedIndexChanged" 
 						RepeatDirection="Horizontal">
 						<asp:ListItem Value="radmin">Radmin</asp:ListItem>
 						<asp:ListItem Value="mstsc">3389</asp:ListItem>
@@ -165,7 +163,6 @@
 					<asp:TextBox ID="TextBoxCashRegisterServerAssistantMode" runat="server" Visible="False"></asp:TextBox>
 					<asp:RadioButtonList ID="RadioButtonListCashRegisterServerRemoteType" 
 						runat="server" AutoPostBack="True" 
-						onselectedindexchanged="RadioButtonListCashRegisterServerRemoteType_SelectedIndexChanged" 
 						RepeatDirection="Horizontal">
 						<asp:ListItem Value="radmin">Radmin</asp:ListItem>
 						<asp:ListItem Value="mstsc">3389</asp:ListItem>
@@ -211,7 +208,6 @@
 						Visible="False"></asp:TextBox>
 					<asp:RadioButtonList ID="RadioButtonListMovieServerRemoteType" runat="server" 
 						AutoPostBack="True" 
-						onselectedindexchanged="RadioButtonListMovieServerRemoteType_SelectedIndexChanged" 
 						RepeatDirection="Horizontal">
 						<asp:ListItem Value="radmin">Radmin</asp:ListItem>
 						<asp:ListItem Value="mstsc">3389</asp:ListItem>
@@ -257,7 +253,6 @@
 						Visible="False"></asp:TextBox>
 					<asp:RadioButtonList ID="RadioButtonListRouterServerRemoteType" runat="server" 
 						AutoPostBack="True" 
-						onselectedindexchanged="RadioButtonListRouterServerRemoteType_SelectedIndexChanged" 
 						RepeatDirection="Horizontal">
 						<asp:ListItem Value="radmin">Radmin</asp:ListItem>
 						<asp:ListItem Value="mstsc">3389</asp:ListItem>
