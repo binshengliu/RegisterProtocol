@@ -299,5 +299,6 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	protected void ButtonSave_Click(object sender, EventArgs e)
 	{
 		string id = this.TextBoxCafeId.Text;
+		//string 
 	}
 }
