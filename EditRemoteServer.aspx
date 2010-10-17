@@ -73,12 +73,12 @@
 				<asp:PlaceHolder ID="PlaceHolderMainServer" runat="server"></asp:PlaceHolder>
 				<asp:RadioButtonList ID="RadioButtonListRemoteType" runat="server" 
 					onselectedindexchanged="RadioButtonListRemoteType_SelectedIndexChanged" 
-					RepeatDirection="Horizontal">
-					<asp:ListItem Value="0">Radmin</asp:ListItem>
-					<asp:ListItem Value="1">3389</asp:ListItem>
-					<asp:ListItem Value="2">ttvnc</asp:ListItem>
-					<asp:ListItem Value="3">TeamViewer</asp:ListItem>
-					<asp:ListItem Value="4">RemotelyAnywhere</asp:ListItem>
+					RepeatDirection="Horizontal" AutoPostBack="True">
+					<asp:ListItem Value="radmin">Radmin</asp:ListItem>
+					<asp:ListItem Value="mstsc">3389</asp:ListItem>
+					<asp:ListItem Value="ttvnc">ttvnc</asp:ListItem>
+					<asp:ListItem Value="teamviewer">TeamViewer</asp:ListItem>
+					<asp:ListItem Value="remotelyanywhere">RemotelyAnywhere</asp:ListItem>
 				</asp:RadioButtonList>
 			</td>
 		</tr>

@@ -10,12 +10,28 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	protected void Page_Load(object sender, EventArgs e)
 	{
 		string id = Request["id"];
-		AddRadminControls(this.PlaceHolderMainServer);
+		//AddRadminControls(this.PlaceHolderMainServer);
 	}
 	protected void RadioButtonListRemoteType_SelectedIndexChanged(object sender, EventArgs e)
 	{
-		RadioButtonList rb = (RadioButtonList)sender;
-
+		string selectedValue = this.RadioButtonListRemoteType.SelectedValue;
+		switch (selectedValue)
+		{
+			case "radmin":
+				AddRadminControls(this.PlaceHolderMainServer);
+				break;
+			case "mstsc":
+				AddMstscControls(this.PlaceHolderMainServer);
+				break;
+			case "ttvnc":
+				AddTtvncControls(this.PlaceHolderMainServer);
+				break;
+			case "teamviewer":
+				AddTeamviewerControls(this.PlaceHolderMainServer);
+				break;
+			case "remotelyanywhere":
+				break;
+		}
 	}
 
 	private void AddRadminControls(PlaceHolder ph)
@@ -71,11 +87,11 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		ph.Controls.Add(codeLabel);
 		ph.Controls.Add(codeTextBox);
 
-		Label assistTypeLabel = new Label();
-		assistTypeLabel.Text = "辅助类型：";
-		TextBox assistTypeTextBox = new TextBox();
-		ph.Controls.Add(assistTypeLabel);
-		ph.Controls.Add(assistTypeTextBox);
+		Label assistantModeLabel = new Label();
+		assistantModeLabel.Text = "辅助模式：";
+		TextBox assistantModeTextBox = new TextBox();
+		ph.Controls.Add(assistantModeLabel);
+		ph.Controls.Add(assistantModeTextBox);
 	}
 
 	private void AddTeamviewerControls(PlaceHolder ph)
@@ -93,10 +109,12 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		ph.Controls.Add(passwordLabel);
 		ph.Controls.Add(passwordTextBox);
 
-		//Label assistTypeLabel = new Label();
-		//assistTypeLabel.Text = "辅助类型：";
-		//TextBox assistTypeTextBox = new TextBox();
-		//ph.Controls.Add(assistTypeLabel);
-		//ph.Controls.Add(assistTypeTextBox);
+		Label assistantTypeLabel = new Label();
+		assistantTypeLabel.Text = "辅助类型：";
+		assistantTypeLabel.Visible = false;
+		TextBox assistantTypeTextBox = new TextBox();
+		assistantTypeTextBox.Visible = false;
+		ph.Controls.Add(assistantTypeLabel);
+		ph.Controls.Add(assistantTypeTextBox);
 	}
 }
