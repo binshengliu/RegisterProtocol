@@ -22,19 +22,35 @@ public class CafeInformationHelper
 	private const string columnMovieServerType = "movie_server_type";
 	private const string columnRouterServerType = "router_server_type";
 
-	private string id;
-	private string name;
-	private string telephone;
-	private string contact;
-	private string mobile;
-	private string mainServerType;
-	private string secondaryServerType;
-	private string cashServerType;
-	private string movieServerType;
-	private string routerServerType;
+	private string id = "";
+	private string name = "";
+	private string telephone = "";
+	private string contact = "";
+	private string mobile = "";
+	private string mainServerType = "";
+	private string secondaryServerType = "";
+	private string cashServerType = "";
+	private string movieServerType = "";
+	private string routerServerType = "";
+
+	private Dictionary<string, string> parameters = new Dictionary<string, string>();
+	public Dictionary<string, string> Parameters
+	{
+		get { return parameters; }
+	}
 
 	public CafeInformationHelper()
 	{
+		parameters.Add(columnId, id);
+		parameters.Add(columnName, name);
+		parameters.Add(columnTelephone, telephone);
+		parameters.Add(columnContact, contact);
+		parameters.Add(columnMobile, mobile);
+		parameters.Add(columnMainServerType, mainServerType);
+		parameters.Add(columnSecondaryServerType, secondaryServerType);
+		parameters.Add(columnCashServerType, cashServerType);
+		parameters.Add(columnMovieServerType, movieServerType);
+		parameters.Add(columnRouterServerType, routerServerType);
 	}
 	public static CafeInformationHelper GetCafeInformationHelper(string id)
 	{
