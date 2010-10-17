@@ -266,6 +266,8 @@
 	    </table>
     
     </div>
+    <asp:Button ID="ButtonSave" runat="server" onclick="ButtonSave_Click" 
+	    Text="保存" />
     </form>
 </body>
 </html>

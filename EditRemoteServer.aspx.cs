@@ -296,9 +296,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		}
 	}
 
-	protected void RadioButtonListMainServerRemoteType_SelectedIndexChanged(object sender, EventArgs e)
+	protected void ButtonSave_Click(object sender, EventArgs e)
 	{
-		RadioButtonList rbl = (RadioButtonList)sender;
-		string remoteType = rbl.SelectedValue;
+		string id = this.TextBoxCafeId.Text;
 	}
 }
