@@ -83,6 +83,34 @@ public partial class EditRemoteServer : System.Web.UI.Page
 					break;
 			}
 		}
+		else
+		{
+			string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+			List<string> controlIdSuffices = NameHelper.GetControlIdSuffices(remoteClientType);
+			switch (remoteClientType)
+			{
+				case "radmin":
+					Radmin radmin = new Radmin();
+					BindRadminValue(radmin, controlIdInfix);
+					break;
+				case "mstsc":
+					Mstsc mstsc = new Mstsc();
+					BindMstscValue(mstsc, controlIdInfix);
+					break;
+				case "ttvnc":
+					Ttvnc ttvnc = new Ttvnc();
+					BindTtvncValue(ttvnc, controlIdInfix);
+					break;
+				case "teamviewer":
+					Teamviewer teamviewer = new Teamviewer();
+					BindTeamviewerValue(teamviewer, controlIdInfix);
+					break;
+				case "remotelyanywhere":
+					Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
+					BindRemotelyanywhereValue(remotelyanywhere, controlIdInfix);
+					break;
+			}
+		}
 	}
 
 	private void BindRadminValue(Radmin radmin, string controlIdInfix)
@@ -93,21 +121,29 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		TextBox tbIp = (TextBox)FindControl(tbIpId);
 		if (radmin.rIp != null)
 			tbIp.Text = radmin.rIp;
+		else
+			tbIp.Text = "";
 
 		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
 		TextBox tbPort = (TextBox)FindControl(tbPortId);
 		if (radmin.rPort != null)
 			tbPort.Text = radmin.rPort;
+		else
+			tbPort.Text = "";
 
 		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
 		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
 		if (radmin.rUsername != null)
 			tbUsername.Text = radmin.rUsername;
+		else
+			tbUsername.Text = "";
 
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 		if (radmin.rPassword != null)
 			tbPassword.Text = radmin.rPassword;
+		else
+			tbPassword.Text = "";
 	}
 	private void BindMstscValue(Mstsc mstsc, string controlIdInfix)
 	{
@@ -117,21 +153,29 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		TextBox tbIp = (TextBox)FindControl(tbIpId);
 		if (mstsc.mIp != null)
 			tbIp.Text = mstsc.mIp;
+		else
+			tbIp.Text = "";
 
 		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
 		TextBox tbPort = (TextBox)FindControl(tbPortId);
 		if (mstsc.mPort != null)
 			tbPort.Text = mstsc.mPort;
+		else
+			tbPort.Text = "";
 
 		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
 		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
 		if (mstsc.mUsername != null)
 			tbUsername.Text = mstsc.mUsername;
+		else
+			tbUsername.Text = "";
 
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 		if (mstsc.mPassword != null)
 			tbPassword.Text = mstsc.mPassword;
+		else
+			tbPassword.Text = "";
 	}
 	private void BindTtvncValue(Ttvnc ttvnc, string controlIdInfix)
 	{
@@ -139,12 +183,18 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		string tbCodeId = controlIdPrefix + controlIdInfix + "Code";
 		TextBox tbCode = (TextBox)FindControl(tbCodeId);
-		if (ttvnc.tCode != null)
-			tbCode.Text = ttvnc.tCode;
-
 		string tbAssistantModeId = controlIdPrefix + controlIdInfix + "AssistantMode";
 		TextBox tbAssistantMode = (TextBox)FindControl(tbAssistantModeId);
-		tbAssistantMode.Text = ttvnc.tAssistantMode.ToString();
+		if (ttvnc.tCode != null)
+		{
+			tbCode.Text = ttvnc.tCode;
+			tbAssistantMode.Text = ttvnc.tAssistantMode.ToString();
+		}
+		else
+		{
+			tbCode.Text = "";
+			tbAssistantMode.Text = "";
+		}
 	}
 	private void BindTeamviewerValue(Teamviewer teamviewer, string controlIdInfix)
 	{
@@ -152,18 +202,24 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		string tbIdId = controlIdPrefix + controlIdInfix + "Id";
 		TextBox tbId = (TextBox)FindControl(tbIdId);
+		string tbAssistantTypeId = controlIdPrefix + controlIdInfix + "AssistantType";
+		TextBox tbAssistantType = (TextBox)FindControl(tbAssistantTypeId);
 		if (teamviewer.tTeamviewerId != null)
+		{
 			tbId.Text = teamviewer.tTeamviewerId;
-
+			tbAssistantType.Text = teamviewer.tAssistantType.ToString();
+		}
+		else
+		{	
+			tbId.Text = "";
+			tbAssistantType.Text = "";
+		}
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 		if (teamviewer.tPassword != null)
 			tbPassword.Text = teamviewer.tPassword;
-
-		string tbAssistantTypeId = controlIdPrefix + controlIdInfix + "AssistantType";
-		TextBox tbAssistantType = (TextBox)FindControl(tbAssistantTypeId);
-		if (teamviewer.tAssistantType != null)
-			tbAssistantType.Text = teamviewer.tAssistantType.ToString();
+		else
+			tbPassword.Text = "";
 	}
 	private void BindRemotelyanywhereValue(Remotelyanywhere remotelyanywhere, string controlIdInfix)
 	{
@@ -173,21 +229,29 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		TextBox tbIp = (TextBox)FindControl(tbIpId);
 		if (remotelyanywhere.rIp != null)
 			tbIp.Text = remotelyanywhere.rIp;
+		else
+			tbIp.Text = "";
 
 		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
 		TextBox tbPort = (TextBox)FindControl(tbPortId);
 		if (remotelyanywhere.rPort != null)
 			tbPort.Text = remotelyanywhere.rPort;
+		else
+			tbPort.Text = "";
 
 		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
 		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
 		if (remotelyanywhere.rUsername != null)
 			tbUsername.Text = remotelyanywhere.rUsername;
+		else
+			tbUsername.Text = "";
 
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 		if (remotelyanywhere.rPassword != null)
 			tbPassword.Text = remotelyanywhere.rPassword;
+		else
+			tbPassword.Text = "";
 	}
 
 	private void SetRadioButtonSelected(string id)
@@ -403,6 +467,156 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	protected void ButtonSave_Click(object sender, EventArgs e)
 	{
 		string id = this.TextBoxCafeId.Text;
-		//string 
+		string remoteClientType = this.RadioButtonListMainServerRemoteType.SelectedValue;
+	}
+
+	private void SaveRemoteClient(string serverType, string remoteClientType)
+	{
+		switch (remoteClientType)
+		{
+			case "radmin":
+				break;
+			case "mstsc":
+				break;
+			case "ttvnc":
+				break;
+			case "teamviewer":
+				break;
+			case "remotelyanywhere":
+				break;
+		}
+	}
+
+	private void SaveRadmin(string id, string serverType)
+	{
+		string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		string controlIdPrefix = "TextBox";
+		string tbIpId = controlIdPrefix + controlIdInfix + "Ip";
+		TextBox tbIp = (TextBox)FindControl(tbIpId);
+		if (tbIp.Text.Length == 0)
+			return;
+		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
+		TextBox tbPort = (TextBox)FindControl(tbPortId);
+
+		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
+		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
+
+		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
+		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
+
+		IRadminManager rm = GetRadminManager();
+		Radmin radmin = new Radmin();
+		radmin.CiId = id;
+		radmin.CiServerType = serverType;
+		radmin.rIp = tbIp.Text;
+		radmin.rPort = tbPort.Text;
+		radmin.rUsername = tbUsername.Text;
+		radmin.rPassword = tbPassword.Text;
+		rm.SaveOrUpdate(radmin);
+	}
+
+	private void SaveMstsc(string id, string serverType)
+	{
+		string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		string controlIdPrefix = "TextBox";
+		string tbIpId = controlIdPrefix + controlIdInfix + "Ip";
+		TextBox tbIp = (TextBox)FindControl(tbIpId);
+		if (tbIp.Text.Length == 0)
+			return;
+		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
+		TextBox tbPort = (TextBox)FindControl(tbPortId);
+
+		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
+		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
+
+		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
+		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
+
+		IMstscManager mm = GetMstscManager();
+		Mstsc mstsc = new Mstsc();
+		mstsc.CiId = id;
+		mstsc.CiServerType = serverType;
+		mstsc.mIp = tbIp.Text;
+		mstsc.mPort = tbPort.Text;
+		mstsc.mUsername = tbUsername.Text;
+		mstsc.mPassword = tbPassword.Text;
+		mm.SaveOrUpdate(mstsc);
+	}
+	private void SaveTtvnc(string id, string serverType)
+	{
+		string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		string controlIdPrefix = "TextBox";
+		string tbCodeId = controlIdPrefix + controlIdInfix + "Code";
+		TextBox tbCode = (TextBox)FindControl(tbCodeId);
+		string tbAssistantModeId = controlIdPrefix + controlIdInfix + "AssistantMode";
+		TextBox tbAssistantMode = (TextBox)FindControl(tbAssistantModeId);
+		if (tbCode.Text.Length == 0 || tbAssistantMode.Text.Length == 0)
+			return;
+
+		ITtvncManager tm = GetTtvncManager();
+		Ttvnc ttvnc = new Ttvnc();
+		ttvnc.CiId = id;
+		ttvnc.CiServerType = serverType;
+		ttvnc.tCode = tbCode.Text;
+		ttvnc.tAssistantMode = Convert.ToByte(tbAssistantMode.Text);
+		tm.SaveOrUpdate(ttvnc);
+	}
+
+	private void SaveTeamviewer(string id, string serverType)
+	{
+		string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		string controlIdPrefix = "TextBox";
+	
+		string tbIdId = controlIdPrefix + controlIdInfix + "Id";
+		TextBox tbId = (TextBox)FindControl(tbIdId);
+		if (tbId.Text.Length == 0)
+			return;
+		
+		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
+		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
+		if (tbPassword.Text.Length == 0)
+			return;
+
+		string tbAssistantTypeId = controlIdPrefix + controlIdInfix + "AssistantType";
+		TextBox tbAssistantType = (TextBox)FindControl(tbAssistantTypeId);
+		if (tbAssistantTypeId.Text.Length == 0)
+			return;
+
+		ITeamviewerManager tm = GetTeamviewerManager();
+		Teamviewer teamviewer = new Teamviewer();
+		teamviewer.CiId = id;
+		teamviewer.CiServerType = serverType;
+		teamviewer.tTeamviewerId = tbId.Text;
+		teamviewer.tPassword = tbPassword.Text;
+		teamviewer.tAssistantType = Convert.ToInt32(tbAssistantType.Text);
+		tm.SaveOrUpdate(teamviewer);
+	}
+
+	private void SaveRemotelyanywhere(string id, string serverType)
+	{
+		string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		string controlIdPrefix = "TextBox";
+		string tbIpId = controlIdPrefix + controlIdInfix + "Ip";
+		TextBox tbIp = (TextBox)FindControl(tbIpId);
+		if (tbIp.Text.Length == 0)
+			return;
+		string tbPortId = controlIdPrefix + controlIdInfix + "Port";
+		TextBox tbPort = (TextBox)FindControl(tbPortId);
+
+		string tbUsernameId = controlIdPrefix + controlIdInfix + "Username";
+		TextBox tbUsername = (TextBox)FindControl(tbUsernameId);
+
+		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
+		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
+
+		IRemotelyanywhereManager rm = GetRemotelyanywhereManager();
+		Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
+		remotelyanywhere.CiId = id;
+		remotelyanywhere.CiServerType = serverType;
+		remotelyanywhere.rIp = tbIp.Text;
+		remotelyanywhere.rPort = tbPort.Text;
+		remotelyanywhere.rUsername = tbUsername.Text;
+		remotelyanywhere.rPassword = tbPassword.Text;
+		rm.SaveOrUpdate(remotelyanywhere);
 	}
 }
