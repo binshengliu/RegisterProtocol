@@ -68,7 +68,8 @@
     	<table style="width:100%;" align="center">
 		<tr>
 			<td class="style1">
-				主服务器</td>
+				主服务器<asp:CheckBox ID="CheckBoxEnableMainServer" runat="server" />
+			</td>
 			<td class="style2">
 				<asp:Panel ID="PanelMainServer" runat="server">
 					<asp:Label ID="LabelMainServerIp" runat="server" Text="IP：" Visible="False"></asp:Label>
@@ -105,7 +106,8 @@
 		</tr>
 		<tr>
 			<td class="style1">
-				次服务器</td>
+				次服务器<asp:CheckBox ID="CheckBoxEnableSecondaryServer" runat="server" />
+			</td>
 			<td class="style2">
 				<asp:Panel ID="PanelSecondaryServer" runat="server">
 					<asp:Label ID="LabelSecondaryServerIp" runat="server" Text="IP：" Visible="False"></asp:Label>
@@ -138,7 +140,8 @@
 		</tr>
 		<tr>
 			<td class="style1">
-				收银机</td>
+				收银机<asp:CheckBox ID="CheckBoxEnableCashRegisterServer" runat="server" />
+			</td>
 			<td class="style2">
 				<asp:Panel ID="PanelCashRegisterServer" runat="server">
 					<asp:Label ID="LabelCashRegisterServerIp" runat="server" Text="IP：" Visible="False"></asp:Label>
@@ -175,7 +178,8 @@
 		</tr>
 		<tr>
 			<td class="style1">
-				电影服务器</td>
+				电影服务器<asp:CheckBox ID="CheckBoxEnableMovieServer" runat="server" />
+			</td>
 			<td class="style2">
 				<asp:Panel ID="PanelMovieServer" runat="server">
 					<asp:Label ID="LabelMovieServerIp" runat="server" Text="IP：" 
@@ -220,7 +224,8 @@
 		</tr>
 		<tr>
 			<td class="style1">
-				路由器</td>
+				路由器<asp:CheckBox ID="CheckBoxEnableRouterServer" runat="server" />
+			</td>
 			<td class="style2">
 				<asp:Panel ID="PanelRouterServer" runat="server">
 					<asp:Label ID="LabelRouterServerIp" runat="server" Text="IP：" 
