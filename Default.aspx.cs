@@ -66,26 +66,26 @@ public partial class _Default : System.Web.UI.Page
 
 	private string GetRemoteClientName(CafeInformation ci, string serverType)
 	{
-		string remoteClientTableName = null;
+		string remoteClientName = null;
 		switch (serverType)
 		{
 			case "main_server":
-				remoteClientTableName = ci.CiMainServerType;
+				remoteClientName = ci.CiMainServerType;
 				break;
 			case "secondary_server":
-				remoteClientTableName = ci.CiSecondaryServerType;
+				remoteClientName = ci.CiSecondaryServerType;
 				break;
 			case "cash_register_server":
-				remoteClientTableName = ci.CiCashRegisterServerType;
+				remoteClientName = ci.CiCashRegisterServerType;
 				break;
 			case "movie_server":
-				remoteClientTableName = ci.CiMovieServerType;
+				remoteClientName = ci.CiMovieServerType;
 				break;
 			case "router_server":
-				remoteClientTableName = ci.CiRouterServerType;
+				remoteClientName = ci.CiRouterServerType;
 				break;
 		}
-		return remoteClientTableName;
+		return remoteClientName;
 	}
 
 	protected void LinkButtonEdit_Click(object sender, EventArgs e)
