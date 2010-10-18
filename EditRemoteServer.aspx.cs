@@ -62,6 +62,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		{
 			ciManager.Dispose();
 		}
+		if (ci = null)
+			return;
 		string remoteClientType = GetRemoteClientName(ci, serverType);
 		CheckBox serverEnable = (CheckBox)FindControl("CheckBoxEnable" + NameHelper.GetControlIdInfix(serverType));
 		if (remoteClientType == null || remoteClientType.Length == 0)
@@ -301,6 +303,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		{
 			ciManager.Dispose();
 		}
+		if (ci == null)
+			return;
 		foreach (string serverType in serverTypes)
 		{
 			string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
@@ -368,6 +372,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		{
 			ciManager.Dispose();
 		}
+		if (ci == null)
+			return;
 		if (ci.Id != null)
 			this.TextBoxCafeId.Text = ci.Id;
 		if (ci.CiName != null)
