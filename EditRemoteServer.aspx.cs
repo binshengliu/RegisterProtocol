@@ -100,34 +100,6 @@ public partial class EditRemoteServer : System.Web.UI.Page
 					break;
 			}
 		}
-		//else
-		//{
-		//        string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
-		//        List<string> controlIdSuffices = NameHelper.GetControlIdSuffices(remoteClientType);
-		//        switch (remoteClientType)
-		//        {
-		//                case "radmin":
-		//                        Radmin radmin = new Radmin();
-		//                        BindRadminValue(radmin, controlIdInfix);
-		//                        break;
-		//                case "mstsc":
-		//                        Mstsc mstsc = new Mstsc();
-		//                        BindMstscValue(mstsc, controlIdInfix);
-		//                        break;
-		//                case "ttvnc":
-		//                        Ttvnc ttvnc = new Ttvnc();
-		//                        BindTtvncValue(ttvnc, controlIdInfix);
-		//                        break;
-		//                case "teamviewer":
-		//                        Teamviewer teamviewer = new Teamviewer();
-		//                        BindTeamviewerValue(teamviewer, controlIdInfix);
-		//                        break;
-		//                case "remotelyanywhere":
-		//                        Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
-		//                        BindRemotelyanywhereValue(remotelyanywhere, controlIdInfix);
-		//                        break;
-		//        }
-		//}
 	}
 
 	private void BindRadminValue(Radmin radmin, string controlIdInfix)
