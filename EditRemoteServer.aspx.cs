@@ -17,15 +17,16 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		{
 			if (!this.IsPostBack)
 			{
-				FillCafeInformationControls(id);
-				SetRadioButtonSelected(id);
-				BindServersValue(id);
+				CafeInformation ci = GetCafeInformation(id);
+				FillCafeInformationControls(ci);
+				SetRadioButtonSelected(ci);
+				BindServersValue(ci);
 			}
 		}
 		DisplayPageControls(true);
 	}
 
-	private void BindServersValue(string id)
+	private void BindServersValue(CafeInformation ci)
 	{
 		List<string> serverTypes = new List<string>()
 	        {
@@ -34,7 +35,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		foreach (string serverType in serverTypes)
 		{
-			BindServerValue(id, serverType);
+			BindServerValue(ci, serverType);
 		}
 	}
 
@@ -45,25 +46,13 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	/// </summary>
 	/// <param name="id"></param>
 	/// <param name="serverType"></param>
-	private void BindServerValue(string id, string serverType)
+	private void BindServerValue(CafeInformation ci, string serverType)
 	{
+		if (ci == null)
+			return;
+		string id = ci.Id;
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
-		ICafeInformationManager ciManager = GetCafeInformationManager(true);
-		CafeInformation ci;
-		try
-		{
-			ci = ciManager.GetById(id);
-		}
-		catch (System.Exception ex)
-		{
-			return;
-		}
-		finally
-		{
-			ciManager.Dispose();
-		}
-		if (ci = null)
-			return;
+
 		string remoteClientType = GetRemoteClientName(ci, serverType);
 		CheckBox serverEnable = (CheckBox)FindControl("CheckBoxEnable" + NameHelper.GetControlIdInfix(serverType));
 		if (remoteClientType == null || remoteClientType.Length == 0)
@@ -282,29 +271,15 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			tbPassword.Text = "";
 	}
 
-	private void SetRadioButtonSelected(string id)
+	private void SetRadioButtonSelected(CafeInformation ci)
 	{
+		if (ci == null)
+			return;
 		List<string> serverTypes = new List<string>()
 	        {
 	                "main_server", "secondary_server", "cash_register_server", "movie_server", "router_server", 
 	        };
 
-		ICafeInformationManager ciManager = GetCafeInformationManager(true);
-		CafeInformation ci;
-		try
-		{
-			ci = ciManager.GetById(id);
-		}
-		catch (System.Exception ex)
-		{
-			return;
-		}
-		finally
-		{
-			ciManager.Dispose();
-		}
-		if (ci == null)
-			return;
 		foreach (string serverType in serverTypes)
 		{
 			string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
@@ -356,22 +331,25 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		}
 	}
 
-	private void FillCafeInformationControls(string id)
+	private CafeInformation GetCafeInformation(string id)
 	{
 		ICafeInformationManager ciManager = GetCafeInformationManager(false);
-		CafeInformation ci;
+		CafeInformation ci = null;
 		try
 		{
 			ci = ciManager.GetById(id);
 		}
 		catch (System.Exception ex)
 		{
-			return;
 		}
 		finally
 		{
 			ciManager.Dispose();
 		}
+		return ci;
+	}
+	private void FillCafeInformationControls(CafeInformation ci)
+	{
 		if (ci == null)
 			return;
 		if (ci.Id != null)
