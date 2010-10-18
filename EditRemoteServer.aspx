@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+<link rel="stylesheet" href="css/vhg.css" Type="text/css">
     <title>编辑</title>
 	<style type="text/css">
 		.style1

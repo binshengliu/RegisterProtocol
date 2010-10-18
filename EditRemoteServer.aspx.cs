@@ -23,9 +23,6 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			}
 		}
 		DisplayPageControls(true);
-		if (id != null && id.Length > 0)
-		{
-		}
 	}
 
 	private void BindServersValue(string id)
@@ -52,7 +49,19 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	{
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
 		ICafeInformationManager ciManager = GetCafeInformationManager(true);
-		CafeInformation ci = ciManager.GetById(id);
+		CafeInformation ci;
+		try
+		{
+			ci = ciManager.GetById(id);
+		}
+		catch (System.Exception ex)
+		{
+			return;
+		}
+		finally
+		{
+			ciManager.Dispose();
+		}
 		string remoteClientType = GetRemoteClientName(ci, serverType);
 		CheckBox serverEnable = (CheckBox)FindControl("CheckBoxEnable" + NameHelper.GetControlIdInfix(serverType));
 		if (remoteClientType == null || remoteClientType.Length == 0)
@@ -60,9 +69,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			serverEnable.Checked = false;
 			return;
 		}
-
 		serverEnable.Checked = true;
-		ciManager.Dispose();
 		RadioButtonList rbl = GetRadioButtonList(serverType); 
 		if (rbl.SelectedValue == remoteClientType)
 		{
@@ -281,17 +288,27 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	        };
 
 		ICafeInformationManager ciManager = GetCafeInformationManager(true);
+		CafeInformation ci;
+		try
+		{
+			ci = ciManager.GetById(id);
+		}
+		catch (System.Exception ex)
+		{
+			return;
+		}
+		finally
+		{
+			ciManager.Dispose();
+		}
 		foreach (string serverType in serverTypes)
 		{
 			string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
-
-			CafeInformation ci = ciManager.GetById(id);
 
 			string remoteClientName = GetRemoteClientName(ci, serverType);
 			RadioButtonList rbl = GetRadioButtonList(serverType);
 			rbl.SelectedValue = remoteClientName;
 		}
-		ciManager.Dispose();
 	}
 
 	private string GetRemoteClientName(CafeInformation ci, string serverType)
@@ -338,8 +355,19 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	private void FillCafeInformationControls(string id)
 	{
 		ICafeInformationManager ciManager = GetCafeInformationManager(false);
-		CafeInformation ci = ciManager.GetById(id);
-
+		CafeInformation ci;
+		try
+		{
+			ci = ciManager.GetById(id);
+		}
+		catch (System.Exception ex)
+		{
+			return;
+		}
+		finally
+		{
+			ciManager.Dispose();
+		}
 		if (ci.Id != null)
 			this.TextBoxCafeId.Text = ci.Id;
 		if (ci.CiName != null)
@@ -350,7 +378,6 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			this.TextBoxContact.Text = ci.CiContact;
 		if (ci.CiMobile != null)
 			this.TextBoxMobile.Text = ci.CiMobile;
-		ciManager.Dispose();
 	}
 
 	private RadioButtonList GetRadioButtonList(string serverType)

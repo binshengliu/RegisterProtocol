@@ -33,7 +33,15 @@ public partial class _Default : System.Web.UI.Page
 		string defaultLink = "ConfigurationPrompt.aspx";
 		string link = defaultLink;
 		ICafeInformationManager ciManager = GetCafeInformationManager();
-		CafeInformation ci = ciManager.GetById(id.ToString());
+		CafeInformation ci;
+		try
+		{
+			ci = ciManager.GetById(id.ToString());
+		}
+		catch (System.Exception ex)
+		{
+			return link;
+		}
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
 
 		string remoteClientTableName = GetRemoteClientName(ci, serverType);
@@ -41,24 +49,44 @@ public partial class _Default : System.Web.UI.Page
 		switch (remoteClientTableName)
 		{
 			case "radmin":
-				Radmin radmin = GetRadminManager().GetById(id.ToString(), serverType);
-				link = RadminHelper.CreateLink(radmin, defaultLink);	
+				try
+				{
+					Radmin radmin = GetRadminManager().GetById(id.ToString(), serverType);
+					link = RadminHelper.CreateLink(radmin, defaultLink);
+				}
+				catch (System.Exception ex) { }
 				break;
 			case "mstsc":
-				Mstsc mstsc = GetMstscManager().GetById(id.ToString(), serverType);
-				link = MstscHelper.CreateLink(mstsc, defaultLink);	
+				try
+				{
+					Mstsc mstsc = GetMstscManager().GetById(id.ToString(), serverType);
+					link = MstscHelper.CreateLink(mstsc, defaultLink);	
+				}
+				catch (System.Exception ex) { }
 				break;
 			case "ttvnc":
-				Ttvnc ttvnc = GetTtvncManager().GetById(id.ToString(), serverType);
-				link = TtvncHelper.CreateLink(ttvnc, defaultLink);	
+				try
+				{
+					Ttvnc ttvnc = GetTtvncManager().GetById(id.ToString(), serverType);
+					link = TtvncHelper.CreateLink(ttvnc, defaultLink);	
+				}
+				catch (System.Exception ex) { }
 				break;
 			case "teamviewer":
-				Teamviewer teamviewer = GetTeamviewerManager().GetById(id.ToString(), serverType);
-				link = TeamviewerHelper.CreateLink(teamviewer, defaultLink);	
+				try
+				{
+					Teamviewer teamviewer = GetTeamviewerManager().GetById(id.ToString(), serverType);
+					link = TeamviewerHelper.CreateLink(teamviewer, defaultLink);	
+				}
+				catch (System.Exception ex) { }
 				break;
 			case "remotelyanywhere":
-				Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager().GetById(id.ToString(), serverType);
-				link = RemotelyanywhereHelper.CreateLink(remotelyanywhere, defaultLink);	
+				try
+				{
+					Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager().GetById(id.ToString(), serverType);
+					link = RemotelyanywhereHelper.CreateLink(remotelyanywhere, defaultLink);	
+				}
+				catch (System.Exception ex) { }
 				break;
 		}
 		return link;
