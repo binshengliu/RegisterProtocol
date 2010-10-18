@@ -91,6 +91,8 @@ public class TeamviewerHelper : RemoteClientHelper
 
 	public static string CreateLink(Teamviewer teamviewer, string defaultValue)
 	{
+		if (teamviewer == null)
+			return defaultValue;
 		string link = defaultValue;
 		if (teamviewer.tTeamviewerId != null && teamviewer.tPassword != null && teamviewer.tTeamviewerId.Length > 0 && teamviewer.tPassword.Length > 0)
 		{

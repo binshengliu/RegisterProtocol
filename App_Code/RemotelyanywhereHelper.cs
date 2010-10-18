@@ -97,6 +97,8 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 
 	public static string CreateLink(Remotelyanywhere remotelyanywhere, string defaultValue)
 	{
+		if (remotelyanywhere == null)
+			return defaultValue;
 		string link = defaultValue;
 		if (remotelyanywhere.rIp != null && remotelyanywhere.rIp.Length > 0)
 		{

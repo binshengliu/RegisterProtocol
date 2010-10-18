@@ -67,6 +67,8 @@ public class TtvncHelper : RemoteClientHelper
 
 	public static string CreateLink(Ttvnc ttvnc, string defaultValue)
 	{
+		if (ttvnc == null)
+			return defaultValue;
 		string link = defaultValue;
 		if (ttvnc.tCode != null && ttvnc.tCode.Length > 0)
 		{

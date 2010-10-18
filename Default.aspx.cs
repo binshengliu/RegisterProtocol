@@ -23,7 +23,7 @@ public partial class _Default : System.Web.UI.Page
 
 	private void Bind()
 	{
-		ICafeInformationManager cafeInformationManager = GetCafeInformationManager();
+		ICafeInformationManager cafeInformationManager = GetCafeInformationManager(true);
 		IList<CafeInformation> list = cafeInformationManager.GetAll();
 		this.GridViewCafeInformation.DataSource = list;
 		this.GridViewCafeInformation.DataBind();
@@ -32,7 +32,7 @@ public partial class _Default : System.Web.UI.Page
 	{
 		string defaultLink = "ConfigurationPrompt.aspx";
 		string link = defaultLink;
-		ICafeInformationManager ciManager = GetCafeInformationManager();
+		ICafeInformationManager ciManager = GetCafeInformationManager(true);
 		CafeInformation ci;
 		try
 		{
@@ -51,7 +51,7 @@ public partial class _Default : System.Web.UI.Page
 			case "radmin":
 				try
 				{
-					Radmin radmin = GetRadminManager().GetById(id.ToString(), serverType);
+					Radmin radmin = GetRadminManager(true).GetById(id.ToString(), serverType);
 					link = RadminHelper.CreateLink(radmin, defaultLink);
 				}
 				catch (System.Exception ex) { }
@@ -59,7 +59,7 @@ public partial class _Default : System.Web.UI.Page
 			case "mstsc":
 				try
 				{
-					Mstsc mstsc = GetMstscManager().GetById(id.ToString(), serverType);
+					Mstsc mstsc = GetMstscManager(true).GetById(id.ToString(), serverType);
 					link = MstscHelper.CreateLink(mstsc, defaultLink);	
 				}
 				catch (System.Exception ex) { }
@@ -67,7 +67,7 @@ public partial class _Default : System.Web.UI.Page
 			case "ttvnc":
 				try
 				{
-					Ttvnc ttvnc = GetTtvncManager().GetById(id.ToString(), serverType);
+					Ttvnc ttvnc = GetTtvncManager(true).GetById(id.ToString(), serverType);
 					link = TtvncHelper.CreateLink(ttvnc, defaultLink);	
 				}
 				catch (System.Exception ex) { }
@@ -75,7 +75,7 @@ public partial class _Default : System.Web.UI.Page
 			case "teamviewer":
 				try
 				{
-					Teamviewer teamviewer = GetTeamviewerManager().GetById(id.ToString(), serverType);
+					Teamviewer teamviewer = GetTeamviewerManager(true).GetById(id.ToString(), serverType);
 					link = TeamviewerHelper.CreateLink(teamviewer, defaultLink);	
 				}
 				catch (System.Exception ex) { }
@@ -83,7 +83,7 @@ public partial class _Default : System.Web.UI.Page
 			case "remotelyanywhere":
 				try
 				{
-					Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager().GetById(id.ToString(), serverType);
+					Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager(true).GetById(id.ToString(), serverType);
 					link = RemotelyanywhereHelper.CreateLink(remotelyanywhere, defaultLink);	
 				}
 				catch (System.Exception ex) { }
@@ -125,7 +125,7 @@ public partial class _Default : System.Web.UI.Page
 	protected void LinkButtonDelete_Click(object sender, EventArgs e)
 	{
 		string id = ((LinkButton)sender).CommandArgument.ToString();
-		ICafeInformationManager cim = GetCafeInformationManager();
+		ICafeInformationManager cim = GetCafeInformationManager(true);
 		try
 		{
 			CafeInformation ci = cim.GetById(id);
@@ -139,10 +139,10 @@ public partial class _Default : System.Web.UI.Page
 		}
 		Response.Redirect("Default.aspx");
 	}
-	private ICafeInformationManager GetCafeInformationManager()
+	private ICafeInformationManager GetCafeInformationManager(bool invalidate)
 	{
 		ICafeInformationManager cafeInformationManager = null;
-		if (Session["cafeInformationManager"] == null)
+		if (Session["cafeInformationManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			cafeInformationManager = managerFactory.GetCafeInformationManager();
@@ -152,10 +152,10 @@ public partial class _Default : System.Web.UI.Page
 			cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
 		return cafeInformationManager;
 	}
-	private IRadminManager GetRadminManager()
+	private IRadminManager GetRadminManager(bool invalidate)
 	{
 		IRadminManager radminManager = null;
-		if (Session["radminManager"] == null)
+		if (Session["radminManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			radminManager = managerFactory.GetRadminManager();
@@ -166,10 +166,10 @@ public partial class _Default : System.Web.UI.Page
 		return radminManager;
 	}
 
-	private IMstscManager GetMstscManager()
+	private IMstscManager GetMstscManager(bool invalidate)
 	{
 		IMstscManager mstscManager = null;
-		if (Session["mstscManager"] == null)
+		if (Session["mstscManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			mstscManager = managerFactory.GetMstscManager();
@@ -179,10 +179,10 @@ public partial class _Default : System.Web.UI.Page
 			mstscManager = (IMstscManager)Session["mstscManager"];
 		return mstscManager;
 	}
-	private ITtvncManager GetTtvncManager()
+	private ITtvncManager GetTtvncManager(bool invalidate)
 	{
 		ITtvncManager ttvncManager = null;
-		if (Session["ttvncManager"] == null)
+		if (Session["ttvncManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			ttvncManager = managerFactory.GetTtvncManager();
@@ -192,10 +192,10 @@ public partial class _Default : System.Web.UI.Page
 			ttvncManager = (ITtvncManager)Session["ttvncManager"];
 		return ttvncManager;
 	}
-	private ITeamviewerManager GetTeamviewerManager()
+	private ITeamviewerManager GetTeamviewerManager(bool invalidate)
 	{
 		ITeamviewerManager teamviewerManager = null;
-		if (Session["teamviewerManager"] == null)
+		if (Session["teamviewerManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			teamviewerManager = managerFactory.GetTeamviewerManager();
@@ -205,10 +205,10 @@ public partial class _Default : System.Web.UI.Page
 			teamviewerManager = (ITeamviewerManager)Session["teamviewerManager"];
 		return teamviewerManager;
 	}
-	private IRemotelyanywhereManager GetRemotelyanywhereManager()
+	private IRemotelyanywhereManager GetRemotelyanywhereManager(bool invalidate)
 	{
 		IRemotelyanywhereManager remotelyanywhereManager = null;
-		if (Session["remotelyanywhereManager"] == null)
+		if (Session["remotelyanywhereManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
@@ -218,5 +218,4 @@ public partial class _Default : System.Web.UI.Page
 			remotelyanywhereManager = (IRemotelyanywhereManager)Session["remotelyanywhereManager"];
 		return remotelyanywhereManager;
 	}
-
 }

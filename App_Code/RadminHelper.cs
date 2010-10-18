@@ -84,6 +84,8 @@ public class RadminHelper : RemoteClientHelper
 
 	public static string CreateLink(Radmin radmin, string defaultValue)
 	{
+		if (radmin == null)
+			return defaultValue;
 		string link = defaultValue;
 		if (radmin.rIp != null && radmin.rIp.Length > 0)
 		{

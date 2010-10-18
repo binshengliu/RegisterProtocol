@@ -85,6 +85,8 @@ public class MstscHelper : RemoteClientHelper
 
 	public static string CreateLink(Mstsc mstsc, string defaultValue)
 	{
+		if (mstsc == null)
+			return defaultValue;
 		string link = defaultValue;
 		if (mstsc.mIp != null && mstsc.mIp.Length > 0)
 		{
