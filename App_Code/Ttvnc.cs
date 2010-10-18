@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 
 /// <summary>
 /// Summary description for TtvncHelper
@@ -62,15 +65,15 @@ public class TtvncHelper : RemoteClientHelper
 	}
 	private TtvncHelper() { }
 
-	public override string CreateLink(string defaultValue)
+	public static string CreateLink(Ttvnc ttvnc, string defaultValue)
 	{
 		string link = defaultValue;
-		if (Code.Length > 0)
+		if (ttvnc.tCode != null && ttvnc.tCode.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnCode, Code);
-			if (AssistantMode.Length > 0)
-				Catenate(ref link, columnAssistantMode, AssistantMode);
+			RemoteClientHelper.Catenate(ref link, columnCode, ttvnc.tCode);
+			if (ttvnc.tAssistantMode != null && ttvnc.tAssistantMode.ToString().Length > 0)
+				Catenate(ref link, columnAssistantMode, ttvnc.tAssistantMode.ToString());
 		}
 		return link;
 	}

@@ -36,6 +36,36 @@ public partial class _Default : System.Web.UI.Page
 		CafeInformation ci = ciManager.GetById(id.ToString());
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
 
+		string remoteClientTableName = GetRemoteClientName(ci, serverType);
+
+		switch (remoteClientTableName)
+		{
+			case "radmin":
+				Radmin radmin = GetRadminManager().GetById(id.ToString(), serverType);
+				link = RadminHelper.CreateLink(radmin, defaultLink);	
+				break;
+			case "mstsc":
+				Mstsc mstsc = GetMstscManager().GetById(id.ToString(), serverType);
+				link = MstscHelper.CreateLink(mstsc, defaultLink);	
+				break;
+			case "ttvnc":
+				Ttvnc ttvnc = GetTtvncManager().GetById(id.ToString(), serverType);
+				link = TtvncHelper.CreateLink(ttvnc, defaultLink);	
+				break;
+			case "teamviewer":
+				Teamviewer teamviewer = GetTeamviewerManager().GetById(id.ToString(), serverType);
+				link = TeamviewerHelper.CreateLink(teamviewer, defaultLink);	
+				break;
+			case "remotelyanywhere":
+				Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager().GetById(id.ToString(), serverType);
+				link = RemotelyanywhereHelper.CreateLink(remotelyanywhere, defaultLink);	
+				break;
+		}
+		return link;
+	}
+
+	private string GetRemoteClientName(CafeInformation ci, string serverType)
+	{
 		string remoteClientTableName = null;
 		switch (serverType)
 		{
@@ -54,32 +84,8 @@ public partial class _Default : System.Web.UI.Page
 			case "router_server":
 				remoteClientTableName = ci.CiRouterServerType;
 				break;
-		} 
-		RemoteClientHelper rch = null;
-		switch (remoteClientTableName)
-		{
-			case "radmin":
-				rch = RadminHelper.GetRemoteClientHelper(id.ToString(), serverType);
-				break;
-			case "mstsc":
-				rch = MstscHelper.GetRemoteClientHelper(id.ToString(), serverType);
-				break;
-			case "ttvnc":
-				rch = TtvncHelper.GetRemoteClientHelper(id.ToString(), serverType);
-				break;
-			case "teamviewer":
-				rch = TeamviewerHelper.GetRemoteClientHelper(id.ToString(), serverType);
-				break;
-			case "remotelyanywhere":
-				rch = RemotelyanywhereHelper.GetRemoteClientHelper(id.ToString(), serverType);
-				break;
 		}
-		if (rch != null)
-		{
-			Session[remoteClientTableName + id.ToString() + serverType] = rch;
-			link = rch.CreateLink(defaultLink);
-		}
-		return link;
+		return remoteClientTableName;
 	}
 
 	protected void LinkButtonEdit_Click(object sender, EventArgs e)

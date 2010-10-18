@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 
 /// <summary>
 /// Summary description for MstscHelper
@@ -80,19 +83,19 @@ public class MstscHelper : RemoteClientHelper
 	}
 	private MstscHelper() { }
 
-	public override string CreateLink(string defaultValue)
+	public static string CreateLink(Mstsc mstsc, string defaultValue)
 	{
 		string link = defaultValue;
-		if (Ip.Length > 0)
+		if (mstsc.mIp != null && mstsc.mIp.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnIp, Ip);
-			if (Port.Length > 0)
-				Catenate(ref link, columnPort, Port);
-			if (Username.Length > 0)
-				Catenate(ref link, columnUsername, Username);
-			if (Password.Length > 0)
-				Catenate(ref link, columnPassword, Password);
+			Catenate(ref link, columnIp, mstsc.mIp);
+			if (mstsc.mPort != null && mstsc.mPort.Length > 0)
+				Catenate(ref link, columnPort, mstsc.mPort);
+			if (mstsc.mUsername != null && mstsc.mUsername.Length > 0)
+				Catenate(ref link, columnUsername, mstsc.mUsername);
+			if (mstsc.mPassword != null && mstsc.mPassword.Length > 0)
+				Catenate(ref link, columnPassword, mstsc.mPassword);
 		}
 		return link;
 	}

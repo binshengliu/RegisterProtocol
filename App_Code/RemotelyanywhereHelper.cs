@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 
 /// <summary>
 /// Summary description for RemotelyanywhereHelper
@@ -78,7 +81,7 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 	}
 	private RemotelyanywhereHelper() { }
 
-	protected override string Catenate(ref string link, string key, string value)
+	protected static string Catenate(ref string link, string key, string value)
 	{
 		switch (key)
 		{
@@ -92,15 +95,15 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 		return link;
 	}
 
-	public override string CreateLink(string defaultValue)
+	public static string CreateLink(Remotelyanywhere remotelyanywhere, string defaultValue)
 	{
 		string link = defaultValue;
-		if (Ip.Length > 0)
+		if (remotelyanywhere.rIp != null && remotelyanywhere.rIp.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnIp, Ip);
-			if (Port.Length > 0)
-				Catenate(ref link, columnPort, Port);
+			Catenate(ref link, columnIp, remotelyanywhere.rIp);
+			if (remotelyanywhere.rPort != null && remotelyanywhere.rPort.Length > 0)
+				Catenate(ref link, columnPort, remotelyanywhere.rPort);
 		}
 		return link;
 	}

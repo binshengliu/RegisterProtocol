@@ -11,8 +11,8 @@ using System.Data;
 public abstract class RemoteClientHelper
 {
 	public abstract Dictionary<string, string> Parameters { get; }
-	public abstract string CreateLink(string defaultValue);
-	protected virtual string Catenate(ref string link, string key, string value)
+	//public abstract string CreateLink(string defaultValue);
+	protected static string Catenate(ref string link, string key, string value)
 	{
 		link += "&" + key + "=" + value;
 		return link;

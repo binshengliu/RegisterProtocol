@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 
 /// <summary>
 /// Summary description for TeamviewerHelper
@@ -72,30 +75,30 @@ public class TeamviewerHelper : RemoteClientHelper
 	}
 	private TeamviewerHelper() { }
 
-	protected override string Catenate(ref string link, string key, string value)
+	protected static string Catenate(ref string link, string key, string value)
 	{
 		switch (key)
 		{
 			case columnTeamviewerId:
-				base.Catenate(ref link, "id", value);
+				RemoteClientHelper.Catenate(ref link, "id", value);
 				break;
 			default:
-				base.Catenate(ref link, key, value);
+				RemoteClientHelper.Catenate(ref link, key, value);
 				break;
 		}
 		return link;
 	}
 
-	public override string CreateLink(string defaultValue)
+	public static string CreateLink(Teamviewer teamviewer, string defaultValue)
 	{
 		string link = defaultValue;
-		if (TeamviewerId.Length > 0 && Password.Length > 0)
+		if (teamviewer.tTeamviewerId != null && teamviewer.tPassword != null && teamviewer.tTeamviewerId.Length > 0 && teamviewer.tPassword.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnTeamviewerId, TeamviewerId);
-			Catenate(ref link, columnPassword, Password);
-			if (AssistantType.Length > 0)
-				Catenate(ref link, columnAssistantType, AssistantType);
+			Catenate(ref link, columnTeamviewerId, teamviewer.tTeamviewerId);
+			Catenate(ref link, columnPassword, teamviewer.tPassword);
+			if (teamviewer.tAssistantType != null && teamviewer.tAssistantType.ToString().Length > 0)
+				Catenate(ref link, columnAssistantType, teamviewer.tAssistantType.ToString());
 		}
 		return link;
 	}

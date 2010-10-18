@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
-
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 /// <summary>
 /// Summary description for RadminHelper
 /// </summary>
@@ -80,19 +82,19 @@ public class RadminHelper : RemoteClientHelper
 	}
 	private RadminHelper() { }
 
-	public override string CreateLink(string defaultValue)
+	public static string CreateLink(Radmin radmin, string defaultValue)
 	{
 		string link = defaultValue;
-		if (Ip.Length > 0)
+		if (radmin.rIp != null && radmin.rIp.Length > 0)
 		{
 			link = initialLink;
-			Catenate(ref link, columnIp, Ip);
-			if (Port.Length > 0)
-				Catenate(ref link, columnPort, Port);
-			if (Username.Length > 0)
-				Catenate(ref link, columnUsername, Username);
-			if (Password.Length > 0)
-				Catenate(ref link, columnPassword, Password);
+			RemoteClientHelper.Catenate(ref link, columnIp, radmin.rIp);
+			if (radmin.rPort != null && radmin.rPort.Length > 0)
+				Catenate(ref link, columnPort, radmin.rPort);
+			if (radmin.rUsername != null && radmin.rUsername.Length > 0)
+				Catenate(ref link, columnUsername, radmin.rUsername);
+			if (radmin.rPassword != null && radmin.rPassword.Length > 0)
+				Catenate(ref link, columnPassword, radmin.rPassword);
 		}
 		return link;
 	}
