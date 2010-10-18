@@ -45,14 +45,17 @@ public partial class _Default : System.Web.UI.Page
 			IRemotelyanywhereManager remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
 			Session["remotelyanywhereManager"] = remotelyanywhereManager;
 		}
-		Bind();
+		if (!IsPostBack)
+		{
+			Bind();
+		}
 	}
 	private void Bind()
 	{
 		ICafeInformationManager cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
 		IList<CafeInformation> list = cafeInformationManager.GetAll();
 		this.GridViewCafeInformation.DataSource = list;
-		this.Bind();
+		this.GridViewCafeInformation.DataBind();
 	}
 	protected string CreateLink(object id, string serverType)
 	{
