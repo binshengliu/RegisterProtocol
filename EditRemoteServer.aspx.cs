@@ -15,9 +15,9 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string id = Request["id"];
 		if (id != null && id.Length > 0)
 		{
-			FillCafeInformationControls(id);
 			if (!this.IsPostBack)
 			{
+				FillCafeInformationControls(id);
 				SetRadioButtonSelected(id);
 			}
 		}
@@ -51,9 +51,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	private void BindServerValue(string id, string serverType)
 	{
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
-		CafeInformation ci = GetCafeInformationManager().GetById(id);
+		ICafeInformationManager ciManager = GetCafeInformationManager(true);
+		CafeInformation ci = ciManager.GetById(id);
 		string remoteClientType = GetRemoteClientName(ci, serverType);
-
+		ciManager.Dispose();
 		RadioButtonList rbl = GetRadioButtonList(serverType); 
 		if (rbl.SelectedValue == remoteClientType)
 		{
@@ -62,24 +63,34 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			switch (remoteClientType)
 			{
 				case "radmin":
-					Radmin radmin = GetRadminManager().GetById(id, serverType);
+					IRadminManager radminManager = GetRadminManager(true);
+					Radmin radmin = radminManager.GetById(id, serverType);
 					BindRadminValue(radmin, controlIdInfix);
+					radminManager.Dispose();
 					break;
 				case "mstsc":
-					Mstsc mstsc = GetMstscManager().GetById(id, serverType);
+					IMstscManager mstscManager = GetMstscManager(true);
+					Mstsc mstsc = mstscManager.GetById(id, serverType);
 					BindMstscValue(mstsc, controlIdInfix);
+					mstscManager.Dispose();
 					break;
 				case "ttvnc":
-					Ttvnc ttvnc = GetTtvncManager().GetById(id, serverType);
+					ITtvncManager ttvncManager = GetTtvncManager(true);
+					Ttvnc ttvnc = ttvncManager.GetById(id, serverType);
 					BindTtvncValue(ttvnc, controlIdInfix);
+					ttvncManager.Dispose();
 					break;
 				case "teamviewer":
-					Teamviewer teamviewer = GetTeamviewerManager().GetById(id, serverType);
+					ITeamviewerManager teamviewerManager = GetTeamviewerManager(true);
+					Teamviewer teamviewer = teamviewerManager.GetById(id, serverType);
 					BindTeamviewerValue(teamviewer, controlIdInfix);
+					teamviewerManager.Dispose();
 					break;
 				case "remotelyanywhere":
-					Remotelyanywhere remotelyanywhere = GetRemotelyanywhereManager().GetById(id, serverType);
+					IRemotelyanywhereManager remotelyanywhereManager = GetRemotelyanywhereManager(true);
+					Remotelyanywhere remotelyanywhere = remotelyanywhereManager.GetById(id, serverType);
 					BindRemotelyanywhereValue(remotelyanywhere, controlIdInfix);
+					remotelyanywhereManager.Dispose();
 					break;
 			}
 		}
@@ -261,16 +272,18 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	                "main_server", "secondary_server", "cash_register_server", "movie_server", "router_server", 
 	        };
 
+		ICafeInformationManager ciManager = GetCafeInformationManager(true);
 		foreach (string serverType in serverTypes)
 		{
 			string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
 
-			CafeInformation ci = GetCafeInformationManager().GetById(id);
+			CafeInformation ci = ciManager.GetById(id);
 
 			string remoteClientName = GetRemoteClientName(ci, serverType);
 			RadioButtonList rbl = GetRadioButtonList(serverType);
 			rbl.SelectedValue = remoteClientName;
 		}
+		ciManager.Dispose();
 	}
 
 	private string GetRemoteClientName(CafeInformation ci, string serverType)
@@ -316,7 +329,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 	private void FillCafeInformationControls(string id)
 	{
-		ICafeInformationManager ciManager = GetCafeInformationManager();
+		ICafeInformationManager ciManager = GetCafeInformationManager(false);
 		CafeInformation ci = ciManager.GetById(id);
 
 		if (ci.Id != null)
@@ -329,6 +342,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			this.TextBoxContact.Text = ci.CiContact;
 		if (ci.CiMobile != null)
 			this.TextBoxMobile.Text = ci.CiMobile;
+		ciManager.Dispose();
 	}
 
 	private RadioButtonList GetRadioButtonList(string serverType)
@@ -384,10 +398,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			}
 		}
 	}
-	private ICafeInformationManager GetCafeInformationManager()
+	private ICafeInformationManager GetCafeInformationManager(bool invalidate)
 	{
 		ICafeInformationManager cafeInformationManager = null;
-		if (Session["cafeInformationManager"] == null)
+		if (Session["cafeInformationManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			cafeInformationManager = managerFactory.GetCafeInformationManager();
@@ -397,10 +411,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
 		return cafeInformationManager;
 	}
-	private IRadminManager GetRadminManager()
+	private IRadminManager GetRadminManager(bool invalidate)
 	{
 		IRadminManager radminManager = null;
-		if (Session["radminManager"] == null)
+		if (Session["radminManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			radminManager = managerFactory.GetRadminManager();
@@ -411,10 +425,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		return radminManager;
 	}
 
-	private IMstscManager GetMstscManager()
+	private IMstscManager GetMstscManager(bool invalidate)
 	{
 		IMstscManager mstscManager = null;
-		if (Session["mstscManager"] == null)
+		if (Session["mstscManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			mstscManager = managerFactory.GetMstscManager();
@@ -424,10 +438,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			mstscManager = (IMstscManager)Session["mstscManager"];
 		return mstscManager;
 	}
-	private ITtvncManager GetTtvncManager()
+	private ITtvncManager GetTtvncManager(bool invalidate)
 	{
 		ITtvncManager ttvncManager = null;
-		if (Session["ttvncManager"] == null)
+		if (Session["ttvncManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			ttvncManager = managerFactory.GetTtvncManager();
@@ -437,10 +451,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			ttvncManager = (ITtvncManager)Session["ttvncManager"];
 		return ttvncManager;
 	}
-	private ITeamviewerManager GetTeamviewerManager()
+	private ITeamviewerManager GetTeamviewerManager(bool invalidate)
 	{
 		ITeamviewerManager teamviewerManager = null;
-		if (Session["teamviewerManager"] == null)
+		if (Session["teamviewerManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			teamviewerManager = managerFactory.GetTeamviewerManager();
@@ -450,10 +464,10 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			teamviewerManager = (ITeamviewerManager)Session["teamviewerManager"];
 		return teamviewerManager;
 	}
-	private IRemotelyanywhereManager GetRemotelyanywhereManager()
+	private IRemotelyanywhereManager GetRemotelyanywhereManager(bool invalidate)
 	{
 		IRemotelyanywhereManager remotelyanywhereManager = null;
-		if (Session["remotelyanywhereManager"] == null)
+		if (Session["remotelyanywhereManager"] == null || invalidate)
 		{
 			IManagerFactory managerFactory = new ManagerFactory();
 			remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
@@ -487,14 +501,18 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	{
 		if (this.TextBoxCafeId.Text.Length == 0 || this.TextBoxCafeName.Text.Length == 0)
 			return;
+		string id = this.TextBoxCafeId.Text;
+		ICafeInformationManager manager = GetCafeInformationManager(true);
 		try
 		{
-			ICafeInformationManager manager = GetCafeInformationManager();
-			//CafeInformation ci;
-			//ci = (CafeInformation)manager.Session.GetISession().Load(typeof(CafeInformation), this.TextBoxCafeId.Text);
-			//if (ci == null)
-			CafeInformation ci = new CafeInformation();
-			ci.Id = this.TextBoxCafeId.Text;
+			bool save = false;
+			CafeInformation ci = manager.Session.GetISession().Get<CafeInformation>(id);
+			if (ci == null)
+			{
+				ci = new CafeInformation();
+				ci.Id = id;
+				save = true;
+			}
 			ci.CiName = this.TextBoxCafeName.Text;
 			ci.CiTelephone = this.TextBoxTelephone.Text;
 			ci.CiContact = this.TextBoxContact.Text;
@@ -504,12 +522,21 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			ci.CiCashRegisterServerType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
 			ci.CiMovieServerType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
 			ci.CiRouterServerType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
-			manager.Session.GetISession().Merge(ci);
+			//manager.Session.GetISession().Clear();
+			if (save)
+				manager.Save(ci);
+			else
+				manager.Update(ci);
+			//manager.Session.GetISession().SaveOrUpdateCopy(ci);
 			manager.Session.CommitChanges();
 		}
 		catch (System.Exception ex)
 		{
 			Response.Write(ex.Message);
+		}
+		finally
+		{
+			manager.Dispose();
 		}
 	}
 	private void SaveRemoteClient(string serverType, string remoteClientType)
@@ -552,23 +579,36 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
-
+		
+		IRadminManager manager = GetRadminManager(true);
 		try
 		{
-			IRadminManager manager = GetRadminManager();
-			Radmin radmin = new Radmin();
-			radmin.CiId = id;
-			radmin.CiServerType = serverType;
+			bool save = false;
+			Radmin key = new Radmin();
+			key.CiId = id;
+			key.CiServerType = serverType;
+			Radmin radmin = manager.Session.GetISession().Get<Radmin>(key);
+			if (radmin == null)
+			{
+				radmin = new Radmin();
+				radmin.CiId = id;
+				radmin.CiServerType = serverType;
+				save = true;
+			}
 			radmin.rIp = tbIp.Text;
 			radmin.rPort = tbPort.Text;
 			radmin.rUsername = tbUsername.Text;
 			radmin.rPassword = tbPassword.Text;
-			manager.Session.GetISession().SaveOrUpdateCopy(radmin);
+			if (save)
+				manager.Save(radmin);
+			else
+				manager.Update(radmin);
 			manager.Session.CommitChanges();
 		}
-		catch (System.Exception ex)
+		catch (System.Exception ex) { }
+		finally
 		{
-			
+			manager.Dispose();
 		}
 	}
 
@@ -589,22 +629,35 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 
+		IMstscManager manager = GetMstscManager(true);
 		try
 		{
-			IMstscManager manager = GetMstscManager();
-			Mstsc mstsc = new Mstsc();
-			mstsc.CiId = id;
-			mstsc.CiServerType = serverType;
+			bool save = false;
+			Mstsc key = new Mstsc();
+			key.CiId = id;
+			key.CiServerType = serverType;
+			Mstsc mstsc = manager.Session.GetISession().Get<Mstsc>(key);
+			if (mstsc == null)
+			{
+				mstsc = new Mstsc();
+				mstsc.CiId = id;
+				mstsc.CiServerType = serverType;
+				save = true;
+			}
 			mstsc.mIp = tbIp.Text;
 			mstsc.mPort = tbPort.Text;
 			mstsc.mUsername = tbUsername.Text;
 			mstsc.mPassword = tbPassword.Text;
-			manager.SaveOrUpdate(mstsc);
+			if (save)
+				manager.Save(mstsc);
+			else
+				manager.Update(mstsc);
 			manager.Session.CommitChanges();
 		}
-		catch (System.Exception ex)
+		catch (System.Exception ex) { }
+		finally
 		{
-			
+			manager.Dispose();
 		}
 	}
 	private void SaveTtvnc(string id, string serverType)
@@ -618,20 +671,33 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		if (tbCode.Text.Length == 0 || tbAssistantMode.Text.Length == 0)
 			return;
 
+		ITtvncManager manager = GetTtvncManager(true);
 		try
 		{
-			ITtvncManager manager = GetTtvncManager();
-			Ttvnc ttvnc = new Ttvnc();
-			ttvnc.CiId = id;
-			ttvnc.CiServerType = serverType;
+			bool save = false;
+			Ttvnc key = new Ttvnc();
+			key.CiId = id;
+			key.CiServerType = serverType;
+			Ttvnc ttvnc = manager.Session.GetISession().Get<Ttvnc>(key);
+			if (ttvnc == null)
+			{
+				ttvnc = new Ttvnc();
+				ttvnc.CiId = id;
+				ttvnc.CiServerType = serverType;
+				save = true;
+			}
 			ttvnc.tCode = tbCode.Text;
 			ttvnc.tAssistantMode = Convert.ToByte(tbAssistantMode.Text);
-			manager.SaveOrUpdate(ttvnc);
+			if (save)
+				manager.Save(ttvnc);
+			else
+				manager.Update(ttvnc);
 			manager.Session.CommitChanges();
 		}
-		catch (System.Exception ex)
+		catch (System.Exception ex) { }
+		finally
 		{
-			
+			manager.Dispose();
 		}
 	}
 
@@ -655,21 +721,34 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		if (tbAssistantType.Text.Length == 0)
 			return;
 
+		ITeamviewerManager manager = GetTeamviewerManager(true);
 		try
 		{
-			ITeamviewerManager manager = GetTeamviewerManager();
-			Teamviewer teamviewer = new Teamviewer();
-			teamviewer.CiId = id;
-			teamviewer.CiServerType = serverType;
+			bool save = false;
+			Teamviewer key = new Teamviewer();
+			key.CiId = id;
+			key.CiServerType = serverType;
+			Teamviewer teamviewer = manager.Session.GetISession().Get<Teamviewer>(key);
+			if (teamviewer == null)
+			{
+				teamviewer = new Teamviewer();
+				teamviewer.CiId = id;
+				teamviewer.CiServerType = serverType;
+				save = true;
+			}
 			teamviewer.tTeamviewerId = tbId.Text;
 			teamviewer.tPassword = tbPassword.Text;
 			teamviewer.tAssistantType = Convert.ToInt32(tbAssistantType.Text);
-			manager.SaveOrUpdate(teamviewer);
+			if (save)
+				manager.Save(teamviewer);
+			else
+				manager.Update(teamviewer);
 			manager.Session.CommitChanges();
 		}
-		catch (System.Exception ex)
+		catch (System.Exception ex) { }
+		finally
 		{
-			
+			manager.Dispose();
 		}
 	}
 
@@ -690,22 +769,35 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 
+		IRemotelyanywhereManager manager = GetRemotelyanywhereManager(true);
 		try
 		{
-			IRemotelyanywhereManager manager = GetRemotelyanywhereManager();
-			Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
-			remotelyanywhere.CiId = id;
-			remotelyanywhere.CiServerType = serverType;
+			bool save = false;
+			Remotelyanywhere key = new Remotelyanywhere();
+			key.CiId = id;
+			key.CiServerType = serverType;
+			Remotelyanywhere remotelyanywhere = manager.Session.GetISession().Get<Remotelyanywhere>(key);
+			if (remotelyanywhere == null)
+			{
+				remotelyanywhere = new Remotelyanywhere();
+				remotelyanywhere.CiId = id;
+				remotelyanywhere.CiServerType = serverType;
+				save = true;
+			}
 			remotelyanywhere.rIp = tbIp.Text;
 			remotelyanywhere.rPort = tbPort.Text;
 			remotelyanywhere.rUsername = tbUsername.Text;
 			remotelyanywhere.rPassword = tbPassword.Text;
-			manager.SaveOrUpdate(remotelyanywhere);
+			if (save)
+				manager.Save(remotelyanywhere);
+			else
+				manager.Update(remotelyanywhere);
 			manager.Session.CommitChanges();
 		}
-		catch (System.Exception ex)
+		catch (System.Exception ex) { }
+		finally
 		{
-			
+			manager.Dispose();
 		}
 	}
 }
