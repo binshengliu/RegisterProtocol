@@ -519,6 +519,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			remoteClientType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
 			SaveRemoteClient("router_server", remoteClientType);
 		}
+		Response.Redirect("Default.aspx");
 	}
 
 	private void SaveCafeInformation()

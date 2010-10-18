@@ -97,6 +97,19 @@ public partial class _Default : System.Web.UI.Page
 	protected void LinkButtonDelete_Click(object sender, EventArgs e)
 	{
 		string id = ((LinkButton)sender).CommandArgument.ToString();
+		ICafeInformationManager cim = GetCafeInformationManager();
+		try
+		{
+			CafeInformation ci = cim.GetById(id);
+			cim.Delete(ci);
+			cim.Session.CommitChanges();
+		}
+		catch (System.Exception ex) { }
+		finally
+		{
+			cim.Dispose();
+		}
+		Response.Redirect("Default.aspx");
 	}
 	private ICafeInformationManager GetCafeInformationManager()
 	{
