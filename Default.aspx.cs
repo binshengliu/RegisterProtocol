@@ -8,13 +8,52 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Specialized;
-
+using RemoteControl.Data.Base;
+using RemoteControl.Data.BusinessObjects;
+using RemoteControl.Data.ManagerObjects;
 public partial class _Default : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
+		if (Session["cafeInformationManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			ICafeInformationManager cafeInformationManager = managerFactory.GetCafeInformationManager();
+			Session["cafeInformationManager"] = cafeInformationManager;
+		}
+		if (Session["mstscManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			IMstscManager mstscManager = managerFactory.GetMstscManager();
+			Session["mstscManager"] = mstscManager;
+		}
+		if (Session["ttvncManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			ITtvncManager ttvncManager = managerFactory.GetTtvncManager();
+			Session["ttvncManager"] = ttvncManager;
+		}
+		if (Session["teamviewerManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			ITeamviewerManager teamviewerManager = managerFactory.GetTeamviewerManager();
+			Session["teamviewerManager"] = teamviewerManager;
+		}
+		if (Session["remotelyanywhereManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			IRemotelyanywhereManager remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
+			Session["remotelyanywhereManager"] = remotelyanywhereManager;
+		}
+		Bind();
 	}
-
+	private void Bind()
+	{
+		ICafeInformationManager cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
+		IList<CafeInformation> list = cafeInformationManager.GetAll();
+		this.GridViewCafeInformation.DataSource = list;
+		this.Bind();
+	}
 	protected string CreateLink(object id, string serverType)
 	{
 		string defaultLink = "ConfigurationPrompt.aspx";

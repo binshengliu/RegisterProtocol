@@ -63,7 +63,7 @@ public class RemotelyanywhereHelper : RemoteClientHelper
 		}
 		sql = sql.Substring(0, sql.Length - 1);
 		sql += " from " + RemotelyanywhereHelper.tableName;
-		sql += " where id=" + id;
+		sql += " where cafe_id=" + id;
 		sql += " and server_type='" + serverType + "'";
 		DataSet ds = DBAccess.GetDataSet(sql, RemotelyanywhereHelper.tableName);
 		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)

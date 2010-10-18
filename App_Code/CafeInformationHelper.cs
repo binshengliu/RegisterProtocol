@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 public class CafeInformationHelper
 {
 	private const string tableName = "cafe_information";
-	public const string columnId = "id";
+	public const string columnId = "cafe_id";
 	public const string columnName = "name";
 	public const string columnTelephone = "telephone";
 	public const string columnContact = "contact";
@@ -105,7 +105,7 @@ public class CafeInformationHelper
 	{
 		CafeInformationHelper helper = null;
 		string selectString = "select * from cafe_information";
-		selectString += " where id=" + id;
+		selectString += " where cafe_id=" + id;
 		DataSet ds = DBAccess.GetDataSet(selectString, tableName);
 		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)
 		{
