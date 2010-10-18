@@ -94,34 +94,34 @@ public partial class EditRemoteServer : System.Web.UI.Page
 					break;
 			}
 		}
-		else
-		{
-			string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
-			List<string> controlIdSuffices = NameHelper.GetControlIdSuffices(remoteClientType);
-			switch (remoteClientType)
-			{
-				case "radmin":
-					Radmin radmin = new Radmin();
-					BindRadminValue(radmin, controlIdInfix);
-					break;
-				case "mstsc":
-					Mstsc mstsc = new Mstsc();
-					BindMstscValue(mstsc, controlIdInfix);
-					break;
-				case "ttvnc":
-					Ttvnc ttvnc = new Ttvnc();
-					BindTtvncValue(ttvnc, controlIdInfix);
-					break;
-				case "teamviewer":
-					Teamviewer teamviewer = new Teamviewer();
-					BindTeamviewerValue(teamviewer, controlIdInfix);
-					break;
-				case "remotelyanywhere":
-					Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
-					BindRemotelyanywhereValue(remotelyanywhere, controlIdInfix);
-					break;
-			}
-		}
+		//else
+		//{
+		//        string controlIdInfix = NameHelper.GetControlIdInfix(serverType);
+		//        List<string> controlIdSuffices = NameHelper.GetControlIdSuffices(remoteClientType);
+		//        switch (remoteClientType)
+		//        {
+		//                case "radmin":
+		//                        Radmin radmin = new Radmin();
+		//                        BindRadminValue(radmin, controlIdInfix);
+		//                        break;
+		//                case "mstsc":
+		//                        Mstsc mstsc = new Mstsc();
+		//                        BindMstscValue(mstsc, controlIdInfix);
+		//                        break;
+		//                case "ttvnc":
+		//                        Ttvnc ttvnc = new Ttvnc();
+		//                        BindTtvncValue(ttvnc, controlIdInfix);
+		//                        break;
+		//                case "teamviewer":
+		//                        Teamviewer teamviewer = new Teamviewer();
+		//                        BindTeamviewerValue(teamviewer, controlIdInfix);
+		//                        break;
+		//                case "remotelyanywhere":
+		//                        Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
+		//                        BindRemotelyanywhereValue(remotelyanywhere, controlIdInfix);
+		//                        break;
+		//        }
+		//}
 	}
 
 	private void BindRadminValue(Radmin radmin, string controlIdInfix)
@@ -532,7 +532,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		}
 		catch (System.Exception ex)
 		{
-			Response.Write(ex.Message);
+			Response.Write("CafeInformation:</br>" + ex.Message);
 		}
 		finally
 		{
@@ -718,9 +718,11 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		string tbAssistantTypeId = controlIdPrefix + controlIdInfix + "AssistantType";
 		TextBox tbAssistantType = (TextBox)FindControl(tbAssistantTypeId);
+		string assistantType = tbAssistantType.Text;
 		if (tbAssistantType.Text.Length == 0)
-			return;
-
+		{
+			assistantType = "0";
+		}
 		ITeamviewerManager manager = GetTeamviewerManager(true);
 		try
 		{
@@ -738,7 +740,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			}
 			teamviewer.tTeamviewerId = tbId.Text;
 			teamviewer.tPassword = tbPassword.Text;
-			teamviewer.tAssistantType = Convert.ToInt32(tbAssistantType.Text);
+			teamviewer.tAssistantType = Convert.ToInt32(assistantType);
 			if (save)
 				manager.Save(teamviewer);
 			else
