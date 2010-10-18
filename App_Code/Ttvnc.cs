@@ -46,7 +46,7 @@ public class TtvncHelper : RemoteClientHelper
 		}
 		sql = sql.Substring(0, sql.Length - 1);
 		sql += " from " + TtvncHelper.tableName;
-		sql += " where cafe_id=" + id;
+		sql += " where ci_id=" + id;
 		sql += " and server_type='" + serverType + "'";
 		DataSet ds = DBAccess.GetDataSet(sql, TtvncHelper.tableName);
 		if (ds != null && ds.Tables.Count != 0 && ds.Tables[0].Rows.Count != 0)

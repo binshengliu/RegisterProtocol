@@ -15,44 +15,15 @@ public partial class _Default : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		if (Session["cafeInformationManager"] == null)
-		{
-			IManagerFactory managerFactory = new ManagerFactory();
-			ICafeInformationManager cafeInformationManager = managerFactory.GetCafeInformationManager();
-			Session["cafeInformationManager"] = cafeInformationManager;
-		}
-		if (Session["mstscManager"] == null)
-		{
-			IManagerFactory managerFactory = new ManagerFactory();
-			IMstscManager mstscManager = managerFactory.GetMstscManager();
-			Session["mstscManager"] = mstscManager;
-		}
-		if (Session["ttvncManager"] == null)
-		{
-			IManagerFactory managerFactory = new ManagerFactory();
-			ITtvncManager ttvncManager = managerFactory.GetTtvncManager();
-			Session["ttvncManager"] = ttvncManager;
-		}
-		if (Session["teamviewerManager"] == null)
-		{
-			IManagerFactory managerFactory = new ManagerFactory();
-			ITeamviewerManager teamviewerManager = managerFactory.GetTeamviewerManager();
-			Session["teamviewerManager"] = teamviewerManager;
-		}
-		if (Session["remotelyanywhereManager"] == null)
-		{
-			IManagerFactory managerFactory = new ManagerFactory();
-			IRemotelyanywhereManager remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
-			Session["remotelyanywhereManager"] = remotelyanywhereManager;
-		}
 		if (!IsPostBack)
 		{
 			Bind();
 		}
 	}
+
 	private void Bind()
 	{
-		ICafeInformationManager cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
+		ICafeInformationManager cafeInformationManager = GetCafeInformationManager();
 		IList<CafeInformation> list = cafeInformationManager.GetAll();
 		this.GridViewCafeInformation.DataSource = list;
 		this.GridViewCafeInformation.DataBind();
@@ -61,14 +32,29 @@ public partial class _Default : System.Web.UI.Page
 	{
 		string defaultLink = "ConfigurationPrompt.aspx";
 		string link = defaultLink;
-		string connStr = ConfigurationManager.ConnectionStrings["RemoteControlConnectionString"].ConnectionString;
+		ICafeInformationManager ciManager = GetCafeInformationManager();
+		CafeInformation ci = ciManager.GetById(id.ToString());
 		string serverColumnName = NameHelper.GetServerTypeColumnName(serverType);
-		if (Session["cafe_information_" + id.ToString()] == null)
+
+		string remoteClientTableName = null;
+		switch (serverType)
 		{
-			Session["cafe_information_" + id.ToString()] = CafeInformationHelper.GetCafeInformationHelper(id.ToString());
-		}
-		CafeInformationHelper helper = (CafeInformationHelper)Session["cafe_information_" + id.ToString()];
-		string remoteClientTableName = helper.Parameters[serverColumnName];
+			case "main_server":
+				remoteClientTableName = ci.CiMainServerType;
+				break;
+			case "secondary_server":
+				remoteClientTableName = ci.CiSecondaryServerType;
+				break;
+			case "cash_register_server":
+				remoteClientTableName = ci.CiCashRegisterServerType;
+				break;
+			case "movie_server":
+				remoteClientTableName = ci.CiMovieServerType;
+				break;
+			case "router_server":
+				remoteClientTableName = ci.CiRouterServerType;
+				break;
+		} 
 		RemoteClientHelper rch = null;
 		switch (remoteClientTableName)
 		{
@@ -106,4 +92,84 @@ public partial class _Default : System.Web.UI.Page
 	{
 		string id = ((LinkButton)sender).CommandArgument.ToString();
 	}
+	private ICafeInformationManager GetCafeInformationManager()
+	{
+		ICafeInformationManager cafeInformationManager = null;
+		if (Session["cafeInformationManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			cafeInformationManager = managerFactory.GetCafeInformationManager();
+			Session["cafeInformationManager"] = cafeInformationManager;
+		}
+		else
+			cafeInformationManager = (ICafeInformationManager)Session["cafeInformationManager"];
+		return cafeInformationManager;
+	}
+	private IRadminManager GetRadminManager()
+	{
+		IRadminManager radminManager = null;
+		if (Session["radminManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			radminManager = managerFactory.GetRadminManager();
+			Session["radminManager"] = radminManager;
+		}
+		else
+			radminManager = (IRadminManager)Session["radminManager"];
+		return radminManager;
+	}
+
+	private IMstscManager GetMstscManager()
+	{
+		IMstscManager mstscManager = null;
+		if (Session["mstscManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			mstscManager = managerFactory.GetMstscManager();
+			Session["mstscManager"] = mstscManager;
+		}
+		else
+			mstscManager = (IMstscManager)Session["mstscManager"];
+		return mstscManager;
+	}
+	private ITtvncManager GetTtvncManager()
+	{
+		ITtvncManager ttvncManager = null;
+		if (Session["ttvncManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			ttvncManager = managerFactory.GetTtvncManager();
+			Session["ttvncManager"] = ttvncManager;
+		}
+		else
+			ttvncManager = (ITtvncManager)Session["ttvncManager"];
+		return ttvncManager;
+	}
+	private ITeamviewerManager GetTeamviewerManager()
+	{
+		ITeamviewerManager teamviewerManager = null;
+		if (Session["teamviewerManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			teamviewerManager = managerFactory.GetTeamviewerManager();
+			Session["teamviewerManager"] = teamviewerManager;
+		}
+		else
+			teamviewerManager = (ITeamviewerManager)Session["teamviewerManager"];
+		return teamviewerManager;
+	}
+	private IRemotelyanywhereManager GetRemotelyanywhereManager()
+	{
+		IRemotelyanywhereManager remotelyanywhereManager = null;
+		if (Session["remotelyanywhereManager"] == null)
+		{
+			IManagerFactory managerFactory = new ManagerFactory();
+			remotelyanywhereManager = managerFactory.GetRemotelyanywhereManager();
+			Session["remotelyanywhereManager"] = remotelyanywhereManager;
+		}
+		else
+			remotelyanywhereManager = (IRemotelyanywhereManager)Session["remotelyanywhereManager"];
+		return remotelyanywhereManager;
+	}
+
 }
