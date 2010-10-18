@@ -544,14 +544,28 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			ci.CiMobile = this.TextBoxMobile.Text;
 			if (this.CheckBoxEnableMainServer.Checked)
 				ci.CiMainServerType = this.RadioButtonListMainServerRemoteType.SelectedValue;
+			else
+				ci.CiMainServerType = "";
+
 			if (this.CheckBoxEnableSecondaryServer.Checked)
 				ci.CiSecondaryServerType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
+			else
+				ci.CiSecondaryServerType = "";
+
 			if (this.CheckBoxEnableCashRegisterServer.Checked)
 				ci.CiCashRegisterServerType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
+			else
+				ci.CiCashRegisterServerType = "";
+
 			if (this.CheckBoxEnableMovieServer.Checked)
 				ci.CiMovieServerType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
+			else
+				ci.CiMovieServerType = "";
+
 			if (this.CheckBoxEnableRouterServer.Checked)
 				ci.CiRouterServerType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
+			else
+				ci.CiRouterServerType = "";
 			//manager.Session.GetISession().Clear();
 			if (save)
 				manager.Save(ci);
