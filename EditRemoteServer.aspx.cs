@@ -504,7 +504,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 
-		IRadminManager rm = GetRadminManager();
+		IRadminManager manager = GetRadminManager();
 		Radmin radmin = new Radmin();
 		radmin.CiId = id;
 		radmin.CiServerType = serverType;
@@ -512,7 +512,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		radmin.rPort = tbPort.Text;
 		radmin.rUsername = tbUsername.Text;
 		radmin.rPassword = tbPassword.Text;
-		rm.SaveOrUpdate(radmin);
+		manager.SaveOrUpdate(radmin);
+		manager.Session.CommitChanges();
 	}
 
 	private void SaveMstsc(string id, string serverType)
@@ -532,7 +533,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 
-		IMstscManager mm = GetMstscManager();
+		IMstscManager manager = GetMstscManager();
 		Mstsc mstsc = new Mstsc();
 		mstsc.CiId = id;
 		mstsc.CiServerType = serverType;
@@ -540,7 +541,8 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		mstsc.mPort = tbPort.Text;
 		mstsc.mUsername = tbUsername.Text;
 		mstsc.mPassword = tbPassword.Text;
-		mm.SaveOrUpdate(mstsc);
+		manager.SaveOrUpdate(mstsc);
+		manager.Session.CommitChanges();
 	}
 	private void SaveTtvnc(string id, string serverType)
 	{
@@ -553,13 +555,14 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		if (tbCode.Text.Length == 0 || tbAssistantMode.Text.Length == 0)
 			return;
 
-		ITtvncManager tm = GetTtvncManager();
+		ITtvncManager manager = GetTtvncManager();
 		Ttvnc ttvnc = new Ttvnc();
 		ttvnc.CiId = id;
 		ttvnc.CiServerType = serverType;
 		ttvnc.tCode = tbCode.Text;
 		ttvnc.tAssistantMode = Convert.ToByte(tbAssistantMode.Text);
-		tm.SaveOrUpdate(ttvnc);
+		manager.SaveOrUpdate(ttvnc);
+		manager.Session.CommitChanges();
 	}
 
 	private void SaveTeamviewer(string id, string serverType)
@@ -579,17 +582,18 @@ public partial class EditRemoteServer : System.Web.UI.Page
 
 		string tbAssistantTypeId = controlIdPrefix + controlIdInfix + "AssistantType";
 		TextBox tbAssistantType = (TextBox)FindControl(tbAssistantTypeId);
-		if (tbAssistantTypeId.Text.Length == 0)
+		if (tbAssistantType.Text.Length == 0)
 			return;
 
-		ITeamviewerManager tm = GetTeamviewerManager();
+		ITeamviewerManager manager = GetTeamviewerManager();
 		Teamviewer teamviewer = new Teamviewer();
 		teamviewer.CiId = id;
 		teamviewer.CiServerType = serverType;
 		teamviewer.tTeamviewerId = tbId.Text;
 		teamviewer.tPassword = tbPassword.Text;
 		teamviewer.tAssistantType = Convert.ToInt32(tbAssistantType.Text);
-		tm.SaveOrUpdate(teamviewer);
+		manager.SaveOrUpdate(teamviewer);
+		manager.Session.CommitChanges();
 	}
 
 	private void SaveRemotelyanywhere(string id, string serverType)
@@ -609,7 +613,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		string tbPasswordId = controlIdPrefix + controlIdInfix + "Password";
 		TextBox tbPassword = (TextBox)FindControl(tbPasswordId);
 
-		IRemotelyanywhereManager rm = GetRemotelyanywhereManager();
+		IRemotelyanywhereManager manager = GetRemotelyanywhereManager();
 		Remotelyanywhere remotelyanywhere = new Remotelyanywhere();
 		remotelyanywhere.CiId = id;
 		remotelyanywhere.CiServerType = serverType;
@@ -617,6 +621,7 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		remotelyanywhere.rPort = tbPort.Text;
 		remotelyanywhere.rUsername = tbUsername.Text;
 		remotelyanywhere.rPassword = tbPassword.Text;
-		rm.SaveOrUpdate(remotelyanywhere);
+		manager.SaveOrUpdate(remotelyanywhere);
+		manager.Session.CommitChanges();
 	}
 }
