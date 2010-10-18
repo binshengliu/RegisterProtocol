@@ -19,12 +19,12 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			{
 				FillCafeInformationControls(id);
 				SetRadioButtonSelected(id);
+				BindServersValue(id);
 			}
 		}
 		DisplayPageControls(true);
 		if (id != null && id.Length > 0)
 		{
-			BindServersValue(id);
 		}
 	}
 
@@ -54,6 +54,14 @@ public partial class EditRemoteServer : System.Web.UI.Page
 		ICafeInformationManager ciManager = GetCafeInformationManager(true);
 		CafeInformation ci = ciManager.GetById(id);
 		string remoteClientType = GetRemoteClientName(ci, serverType);
+		CheckBox serverEnable = (CheckBox)FindControl("CheckBoxEnable" + NameHelper.GetControlIdInfix(serverType));
+		if (remoteClientType == null || remoteClientType.Length == 0)
+		{
+			serverEnable.Checked = false;
+			return;
+		}
+
+		serverEnable.Checked = true;
 		ciManager.Dispose();
 		RadioButtonList rbl = GetRadioButtonList(serverType); 
 		if (rbl.SelectedValue == remoteClientType)
@@ -482,21 +490,37 @@ public partial class EditRemoteServer : System.Web.UI.Page
 	{
 		SaveCafeInformation();
 		string remoteClientType;
-		remoteClientType = this.RadioButtonListMainServerRemoteType.SelectedValue;
-		SaveRemoteClient("main_server", remoteClientType);
+		if (this.CheckBoxEnableMainServer.Checked)
+		{
+			remoteClientType = this.RadioButtonListMainServerRemoteType.SelectedValue;
+			SaveRemoteClient("main_server", remoteClientType);
+		}
 		
-		remoteClientType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
-		SaveRemoteClient("secondary_server", remoteClientType);
+		if (this.CheckBoxEnableSecondaryServer.Checked)
+		{
+			remoteClientType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
+			SaveRemoteClient("secondary_server", remoteClientType);
+		}
 		
-		remoteClientType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
-		SaveRemoteClient("cash_register_server", remoteClientType);
+		if (this.CheckBoxEnableCashRegisterServer.Checked)
+		{
+			remoteClientType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
+			SaveRemoteClient("cash_register_server", remoteClientType);
+		}
 		
-		remoteClientType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
-		SaveRemoteClient("movie_server", remoteClientType);
+		if (this.CheckBoxEnableMovieServer.Checked)
+		{
+			remoteClientType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
+			SaveRemoteClient("movie_server", remoteClientType);
+		}
 		
-		remoteClientType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
-		SaveRemoteClient("router_server", remoteClientType);
+		if (this.CheckBoxEnableRouterServer.Checked)
+		{
+			remoteClientType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
+			SaveRemoteClient("router_server", remoteClientType);
+		}
 	}
+
 	private void SaveCafeInformation()
 	{
 		if (this.TextBoxCafeId.Text.Length == 0 || this.TextBoxCafeName.Text.Length == 0)
@@ -517,11 +541,16 @@ public partial class EditRemoteServer : System.Web.UI.Page
 			ci.CiTelephone = this.TextBoxTelephone.Text;
 			ci.CiContact = this.TextBoxContact.Text;
 			ci.CiMobile = this.TextBoxMobile.Text;
-			ci.CiMainServerType = this.RadioButtonListMainServerRemoteType.SelectedValue;
-			ci.CiSecondaryServerType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
-			ci.CiCashRegisterServerType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
-			ci.CiMovieServerType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
-			ci.CiRouterServerType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
+			if (this.CheckBoxEnableMainServer.Checked)
+				ci.CiMainServerType = this.RadioButtonListMainServerRemoteType.SelectedValue;
+			if (this.CheckBoxEnableSecondaryServer.Checked)
+				ci.CiSecondaryServerType = this.RadioButtonListSecondaryServerRemoteType.SelectedValue;
+			if (this.CheckBoxEnableCashRegisterServer.Checked)
+				ci.CiCashRegisterServerType = this.RadioButtonListCashRegisterServerRemoteType.SelectedValue;
+			if (this.CheckBoxEnableMovieServer.Checked)
+				ci.CiMovieServerType = this.RadioButtonListMovieServerRemoteType.SelectedValue;
+			if (this.CheckBoxEnableRouterServer.Checked)
+				ci.CiRouterServerType = this.RadioButtonListRouterServerRemoteType.SelectedValue;
 			//manager.Session.GetISession().Clear();
 			if (save)
 				manager.Save(ci);
