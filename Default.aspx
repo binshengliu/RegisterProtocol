@@ -4,12 +4,60 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<link rel="stylesheet" href="css/cuscosky.css" Type="text/css">
-    <title>远程管理</title>
+<link href="css/tablecloth/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="css/tablecloth/tablecloth.js"></script>
+ <style>
+
+body{
+	margin:0;
+	padding:0;
+	background:#f1f1f1;
+	font:80% Arial, Helvetica, sans-serif; 
+	color:#555;
+	line-height:150%;
+	text-align:left;
+}
+a{
+	text-decoration:none;
+	color:#555;
+}
+a:hover{
+	text-decoration:none;
+	color:#999;
+}
+h1{
+	font-size:140%;
+	margin:0 20px;
+	line-height:80px;	
+}
+h2{
+	font-size:120%;
+}
+#container{
+	margin:0 auto;
+	width:680px;
+	background:#fff;
+	padding-bottom:20px;
+}
+#content{margin:0 20px;}
+p.sig{	
+	margin:0 auto;
+	width:680px;
+	padding:1em 0;
+}
+form{
+	margin:1em 0;
+	padding:.2em 20px;
+	background:#eee;
+}
+</style>
+   <title>远程管理</title>
 </head>
 <body>
     <form id="form1" runat="server">
     <div>
+    	    <asp:HyperLink ID="HyperLinkAdd" runat="server" 
+		    NavigateUrl="EditRemoteServer.aspx" Target="_blank">添加</asp:HyperLink>
     	<asp:GridView ID="GridViewCafeInformation" runat="server" AllowPaging="True" AllowSorting="True" 
 		    AutoGenerateColumns="False">
 	        		<Columns>
@@ -63,10 +111,6 @@
 			</asp:TemplateField>
 		</Columns>
 	    </asp:GridView>
-	    <asp:SqlDataSource ID="SqlDataSourceCafeInformation" runat="server" 
-		    ConnectionString="<%$ ConnectionStrings:RemoteControlConnectionString %>" 
-		    SelectCommand="SELECT * FROM [cafe_information]">
-	    </asp:SqlDataSource>
     
     </div>
     </form>
